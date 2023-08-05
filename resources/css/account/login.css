@@ -1,0 +1,24 @@
+/* .i-check-wrapper {
+    position: absolute;
+    width: 0;
+}
+
+.i-check {
+    position: relative;
+    left: 1px;
+    vertical-align: top;
+    font-size: 19px;
+    color: #4088EB;
+    pointer-events : none; 
+} */
+
+
+.find-user-info {
+    width: 32%;
+    height: fit-content;
+    justify-content: space-between;
+}
+
+.checkbox {
+    cursor: pointer;
+}

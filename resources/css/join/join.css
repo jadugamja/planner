@@ -1,0 +1,133 @@
+main {
+    position: relative;
+    top: 5.625em;
+    height: calc(100vh - 5.625em);
+
+    display: flex;
+    justify-content: center;
+}
+
+.between-justified {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.try-login {
+    flex-basis: 16rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    font-size: 34px;
+    margin: .6em 0;
+    letter-spacing: 1px;
+}
+
+.label-txt {
+    font-size: 16px;
+}
+
+.label-txt.valid {
+    flex: none;
+    margin-bottom: -20px;
+}
+
+.input-box {
+    height: 41px;
+}
+
+.item-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-wrapper + .item-wrapper {
+    margin-top: 0;
+    margin-bottom: 22px
+}
+
+.row-direction {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 8px;
+    margin-bottom: 25px;
+}
+
+.chk-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.small-width {
+    flex-basis: 422px;
+}
+
+.birth {
+    display: flex;
+    justify-content: space-between;
+}
+
+.birth-box {
+    width: 170px
+}
+
+#b-month .option-wrapper {
+    height: 6.8em;
+    overflow-y: auto;
+    margin: 0 0 0 -14px   
+}
+
+#b-month .selected {
+    display: flex;
+    align-items: center;
+    color: gray;
+}
+
+#b-month .selected-value::after {
+    margin-left: 90px;
+    color: var(--main-txt-color)
+}
+
+.go-login-btn {
+    width: 114px;
+    height: 40px;
+
+    border: 1px solid #D5D6DD!important;
+    background:  transparent;
+    color: #100C25;
+    font-size: 16px;
+}
+
+.double-chk-btn {
+    width: 102px;
+    height: 41px;
+    border: 0;
+    background: #C9C9C9;
+    
+    font-size: 17px;
+    color: #fff;
+
+    cursor: not-allowed
+}
+
+.double-chk-btn.active { 
+    border: 1px solid #cfedff;
+    background: linear-gradient(rgba(219, 234, 255, 1), rgba(219, 234, 255, 0));
+    box-shadow: 0 0 12px rgba(175, 225, 255, 0.25);
+
+    color: #100C25;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s ease-out;
+}
+
+.fa-solid {
+    margin-right: 7px!important
+}

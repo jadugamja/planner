@@ -1,0 +1,259 @@
+
+body {
+    height: 100vh;
+    margin: 0 auto;
+
+    color: #100C25;
+    /* letter-spacing: -1px; */
+}
+
+header {
+    position: fixed;
+    width: 100%;
+    height: 5.2em;
+    /* height: 5.625em; */
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 30px 40px;
+}
+
+.try-join {
+    flex-basis: 18rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/******************** 공통 ********************/
+.logo {
+    cursor: pointer;
+}
+
+.square-btn {
+    border: 0;
+    border-radius: 0;
+}
+/******************** 공통 ********************/
+
+.divided {
+    display: flex;
+    height: inherit;
+
+    background: #f8f8f8;
+}
+
+.banner {
+    flex: 1 1;
+    height: inherit;
+    /* background-color: #FFF7E3; */
+    background-color: #fff;
+
+    box-shadow: 0 4px 4px 0 hsla(0, 0%, 5%, 0.25);
+}
+
+.content {
+    flex: 2.3 1;
+    margin-right: 145px;
+
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
+
+.content-wrapper {
+    flex-basis: 34.375rem;
+    height: 50vh;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-size: 37px;
+    font-weight: 900;
+    letter-spacing: 3px;
+}
+
+.item-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-block-end: 0
+}
+
+.item-wrapper + .item-wrapper {
+    margin-top: 30px
+}
+
+.item-wrapper + .etc-area {
+    margin-top: 28px
+}
+
+.input-box {
+    width: inherit;
+    height: 43px;
+
+    border: 1px solid #D5D6DD;
+    border-radius: 0;
+
+    margin: 8px 0;
+    padding: 0 13px
+}
+
+.input-box:focus {
+    transition: 0.3s;
+    border-radius: 0;
+    outline: 1px solid #20A6F7;
+    box-shadow: 0 0 7px 0 hsla(203, 93%, 55%, 0.25);
+}
+
+/******************** TEXT ********************/
+.h-txt {
+    font-size: 16px;
+    color: #7C7C7C;
+}
+
+.label-txt {
+    font-size: 18px;
+    font-weight: 700
+}
+
+.input-txt {
+    font-size: 16px;
+    font-weight: 400;
+}
+/******************** //TEXT ********************/
+
+
+
+/******************** ICON ********************/
+.i-left {
+    font-size: 18px;
+    font-weight: 700;
+    margin-right: 12px
+}
+/******************** //ICON ********************/
+
+
+
+.etc-area {
+    display: flex;
+    justify-content: space-between;
+
+    height: 2.5rem;
+}
+
+#remeber-me {
+    height: fit-content;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"] + label{
+    display: inline-block;
+    width: 20px;
+    height: 18px;
+    border: 1.5px solid #0093F5;
+    border-radius: 0;
+    background-color: transparent;
+    color: #0093F5;
+
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked + label::after {
+    content: "\f00c";
+    margin-left: 1px;
+    text-align: center;
+    font-size: 18px;
+    line-height: 16px;
+    pointer-events : none;
+}
+
+.after-checkbox-txt {
+    vertical-align: top;
+    font-weight: 500;
+    margin-left: 4px;
+    pointer-events : none;
+}
+
+.etc-txt {
+    display: flex;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.blue-txt {
+    color: #0093F5;
+}
+
+.btn {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 1px;
+
+    color: #fff;
+
+    cursor: pointer;
+}
+
+.go-to-login {
+    cursor: pointer;
+}
+
+.go-to-login-txt {
+    height: fit-content;
+}
+
+.go-join-btn {
+    width: 111px;
+    height: 39px;
+    background-color: #42B72A;
+
+    font-size: 17px;
+    font-weight: 600
+}
+
+.login-btn {
+    width: 100%;
+    height: 40px;
+    background-color: #0093F5;
+}
+
+/* 유효 조건: 기본 */
+.xmark {
+    color: #bbb;
+    font-size: 13px;
+}
+
+.check {
+    color: #bbb;
+    font-size: 13px;
+}
+
+/* 경고 문구 */
+.input-box.warning-box {
+    border: 1px solid #FF0000;
+    margin: 8px 0;
+}
+
+.input-box.warning-box:focus {
+    outline: 0;
+    box-shadow: none;
+}
+
+.warning {
+    font-size: 13px;
+    font-weight: 600;
+    color: #FF0000;
+    margin: 0;
+}
+
+.hide {
+    display: none!important;
+}

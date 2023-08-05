@@ -1,0 +1,21 @@
+
+// 커스텀 XX
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    width: 114px;
+    height: 40px;
+    border: 1px solid #D5D6DD;
+    padding: 0 15px;
+    font-size: 17px;
+
+    background: url('../../resources/img/arrow-down.png') no-repeat calc(100% - 9px) center;
+    background-size: 18px 16px;
+}
+
+select:focus {
+    border-radius: 0;
+    outline: 1px solid #100C25;
+}
