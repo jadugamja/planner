@@ -36,10 +36,11 @@
                             <span class="selected-value">직원</span>
                         </div>
                         <ul class="option-wrapper type-list hide">
-                            <li class="option box-padding" value="">직원</li>
-                            <li class="option box-padding">팀장</li>
+                            <li class="option box-padding" value="0">직원</li>
+                            <li class="option box-padding" value="1">팀장</li>
                         </ul>
                     </div>
+                    <input type="hidden" name="utype" value="0" />
                 </div>
                 <div class="item-wrapper">
                     <label for="uid" class="label-txt">아이디(이메일)</label>
@@ -54,7 +55,7 @@
                 </div>
                 <div class="item-wrapper">
                     <label for="chk-pw" class="label-txt">비밀번호 확인</label>
-                    <input type="password" name="chk-pw" id="chk-pw" class="input-box input-txt" placeholder="비밀번호를 한 번 더 입력하세요" />
+                    <input type="password" id="chk-pw" class="input-box input-txt" placeholder="비밀번호를 한 번 더 입력하세요" />
                 </div>
                 <div class="item-wrapper">
                     <label for="uname" class="label-txt">이름</label>

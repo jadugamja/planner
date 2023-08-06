@@ -10,7 +10,6 @@
 <%@ page import="java.time.format.DateTimeFormatter" %>
 
 <%
-
     // 인코딩 설정
     request.setCharacterEncoding("utf-8");
 
@@ -37,8 +36,11 @@
     PreparedStatement pstmt = null;
     ResultSet rs = null;
 
+    // 결과값 넣을 리스트 생성
     List<Map> planList = new ArrayList<Map>();
+    
     Map<String, Object> map;
+    
 
     try {
         // Connector 파일 불러와서 MariaDB 연결

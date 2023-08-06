@@ -33,7 +33,7 @@ window.addEventListener('load', function(){
     /* 
     * 아이디 입력란 선택 해제 이벤트
     */
-    uid.addEventListener("change", function(e){
+    uid.addEventListener("blur", function(e){
         var t = e.target
         var lastElem = t.parentNode.lastElementChild;
 

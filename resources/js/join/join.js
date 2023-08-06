@@ -1,15 +1,10 @@
-window.addEventListener("load", function(){
-
-    const selectBox = document.querySelector("#type");
-    const optList = document.querySelector('.type-list');
-
-    const form = document.querySelector("form");
+window.onload = function() {
 
     const uname = document.querySelector("#uname");
     const tel = document.querySelector("#tel");
-
+    
     const doubleBtn = document.querySelectorAll(".double-chk-btn");
-
+    
     // 유효성 검사 결과 실패 문구
     const warningStrId = document.createElement("p");
     const warningStrName = document.createElement("p");
@@ -20,7 +15,7 @@ window.addEventListener("load", function(){
     warningStrName.setAttribute("class", "warning");
     warningStrTel.setAttribute("class", "warning");
     warningStrBirth.setAttribute("class", "warning");
-
+    
     var chkGroup;
     var chkIconArr = [];
     var chkStrArr = [];
@@ -28,53 +23,57 @@ window.addEventListener("load", function(){
     var chkStr = null;
     const chkWrapper = document.createElement("div");
     chkWrapper.setAttribute("class", "chk-wrapper");
-
+    
     // uid.focus();
-
+    
     // 홈 버튼 클릭 이벤트
     const homeBtn = document.querySelector('.logo');
     homeBtn.onclick = function() {
         location.href = "../../index.jsp";
     }
-
+    
     // 로그인 버튼 클릭 이벤트
     const loginBtn = document.querySelector(".go-login-btn");
     loginBtn.onclick = function(e) {
         e.preventDefault();
         location.href = "../../index.jsp";
     }
-
-    // 셀렉트 박스 클릭 이벤트    
+    
+    // 셀렉트 박스 클릭 이벤트
+    const selectBox = document.querySelector("#type");
+    const optList = document.querySelector('.type-list');
+    const utype = document.querySelector("input[name='utype']");
     selectBox.addEventListener("click", function(e){
         var t = e.target;
         var isOption = t.classList.contains("option");
-
+    
         // 옵션 선택한 경우
         if(isOption)
             selectOption(t)
-
+    
         // 옵션 리스트 보이기/숨기기
         optList.classList.toggle("hide")
         selectBox.classList.toggle("active")
     });
-
+    
     function selectOption(t) {
-
+    
         var selected;
         
         if(t.closest(".utype") != null)           // 회원 유형 콤보 박스
             selected = selectBox.querySelector(".selected-value")
-        else if(t.closest("#b-month") != null)       // 회원 생일 월 콤보 박스
-            selected = monthBox.querySelector(".selected-value")
+        // else if(t.closest("#b-month") != null)       // 회원 생일 월 콤보 박스
+        //     selected = monthBox.querySelector(".selected-value")
 
+        utype.value = t.value;
         selected.textContent = t.textContent;
     }
-
+    
     // 셀렉트 박스 바깥 영역 클릭 이벤트
     document.addEventListener("click", function(e){
         var t = e.target
         var isSelect = t.classList.contains("select") || t.closest(".select")
-
+    
         if(isSelect)
             return;
         
@@ -84,10 +83,10 @@ window.addEventListener("load", function(){
         // 회원 생일 월
         // monList.classList.add("hide");
         // monthBox.classList.remove("active");
-
+    
     });
-
-
+    
+    
     /*******************************************************************************/
     /* 아이디                                                                      */
     /******************************************************************************/
@@ -98,7 +97,7 @@ window.addEventListener("load", function(){
     uid.addEventListener("change", function(e){
         var t = e.target
         var lastElem = t.parentNode.parentNode.lastElementChild;
-
+    
         if(checkValidation(t)) {    // 유효성 검사 통과
             if(lastElem.nodeName === "P") {
                 lastElem.remove();
@@ -112,21 +111,21 @@ window.addEventListener("load", function(){
             disabledButton(t);
         }
     });
-
+    
     /* 
      * 아이디 중복 확인 클릭 이벤트
      */
     doubleBtn[0].addEventListener("click", function(e){
-
+    
         var idVal = uid.value
         
         var popWidth = 530;
         var popHeight = 220;
-
+    
         // // 팝업창 가운데 정렬
         var popupX = (window.screen.width / 2) - (popWidth / 2);
         var popupY = (window.screen.height / 2) - (popHeight / 2);
-
+    
         // 새 창 열기
         var url = "/planner/views/join/checkDuplicateId.jsp";
         var name = "_blank"
@@ -135,16 +134,16 @@ window.addEventListener("load", function(){
                     + "left=" + popupX + ","
                     + "top=" + popupY + ","
         ;
-
+    
         var fakeModal = document.createElement("div")
         fakeModal.classList.add("modal")
         document.body.appendChild(fakeModal);
-
+    
         window.open(url + "?uid=" + idVal, name, option, true);
-
+    
     });
-
-
+    
+    
     /*******************************************************************************/
     /* 비밀번호                                                                    */
     /******************************************************************************/
@@ -153,38 +152,38 @@ window.addEventListener("load", function(){
      */
     const pw = document.querySelector("#pw");
     pw.addEventListener("focus", function(e){
-
+    
         var t = e.target
-
+    
         // 비밀번호 입력란 첫 선택 시 문구 출력
         if(!t.parentNode.lastElementChild.classList.contains("chk-wrapper") && !t.parentNode.lastElementChild.classList.contains("pass-group")) {
             printCheckConditions(t)
             t.parentNode.appendChild(chkWrapper)
         }
-
+    
     });
-
+    
     /* 
      * 비밀번호 입력란 선택 해제 이벤트
      */
     pw.addEventListener("change", function(e){
-
+    
         var t = e.target
-
+    
         // 공백 문자 체크
         if(!t.value.trim()) {
             if(!checkValidation(t)) 
                 t.classList.add("warning-box")
         }
     });
-
+    
     /* 
      * 비밀번호 입력란 입력 중 이벤트
      */
     pw.addEventListener("input", function(e){
-
+    
         var t = e.target
-
+    
         if(checkValidation(t)) {
             
             t.classList.remove("warning-box")
@@ -206,14 +205,14 @@ window.addEventListener("load", function(){
                 
                 passGroup.appendChild(passIcon)
                 passGroup.appendChild(passStr)
-
+    
                 // t.appendChild(passIcon)
                 t.parentNode.appendChild(passGroup)
             } else {
                 t.previousElementSibling.classList.remove("hide")
                 t.parentNode.lastElementChild.classList.remove("hide")
             }
-
+    
         } else {
             t.classList.add("warning-box")
             
@@ -223,60 +222,60 @@ window.addEventListener("load", function(){
                 t.nextElementSibling.classList.remove("hide")
             }
         }
-
+    
     });
-
-
+    
+    
     /*******************************************************************************/
     /* 비밀번호 확인                                                                */
     /******************************************************************************/
-
+    
     /* 
      * 비밀번호 확인 입력란 선택 이벤트
      */
     const chkPw = document.querySelector("#chk-pw");
     chkPw.addEventListener("focus", function(e){
-
+    
         var t = e.target
-
+    
         // 비밀번호 입력란 첫 선택 시 문구 출력
         if(!t.parentNode.lastElementChild.classList.contains("chk-group") && !t.parentNode.lastElementChild.classList.contains("pass-group")) {
             printCheckConditions(t)
             t.parentNode.appendChild(chkGroup)
         }
     });
-
+    
     /* 
      * 비밀번호 확인 입력란 선택 해제 이벤트
      */
     chkPw.addEventListener("change", function(e){
-
+    
         var t = e.target
-
+    
         // 공백 문자 체크
         if(!t.value.trim()) {
             if(!checkValidation(t)) 
                 t.classList.add("warning-box")
         }
     });
-
+    
     /* 
      * 비밀번호 확인 입력란 입력 이벤트
      */
     chkPw.addEventListener("input", function(e){
         var t = e.target
-
+    
         if(checkValidation(t)) {
             
-
+    
             t.classList.remove("warning-box")
             // 검사 조건 숨기기
             t.nextElementSibling.classList.add("hide")
-
+    
             // 통과 문구 출력
             if(!t.parentNode.lastElementChild.classList.contains("pass-group")) {
                 t.before(createValidIcon())
-
+    
                 const passGroup = document.createElement("div");
                 const passIcon = document.createElement("i");
                 const passStr = document.createElement("p");
@@ -287,18 +286,18 @@ window.addEventListener("load", function(){
                 
                 passGroup.appendChild(passIcon)
                 passGroup.appendChild(passStr)
-
+    
                 // t.appendChild(passIcon)
                 t.parentNode.appendChild(passGroup)
             } else {
                 t.previousElementSibling.classList.remove("hide")
                 t.parentNode.lastElementChild.classList.remove("hide")
             }
-
+    
         } else {
-
+    
             t.classList.add("warning-box")
-
+    
             if(t.parentNode.lastElementChild.classList.contains("pass-group")) {
                  t.previousElementSibling.classList.add("hide")
                 t.parentNode.lastElementChild.classList.add("hide")
@@ -306,20 +305,24 @@ window.addEventListener("load", function(){
             } 
         }
     });
-
+    
+    /*******************************************************************************/
+    /* 이름                                                                        */
+    /******************************************************************************/
+    
     /* 
     * 이름 입력란 선택 해제 이벤트
     */
     uname.addEventListener("change", function(e){
         var t = e.target
         var lastElem = t.parentNode.lastElementChild;
-
+    
         if(checkValidation(t)) {    // 유효성 검사 통과
             if(t.parentElement.getElementsByClassName("warning").length == 1) {
                 lastElem.remove()
                 t.classList.remove("warning-box")
             }
-
+    
             if(t.parentElement.getElementsByClassName("valid").length == 0)
                 t.before(createValidIcon())
             else
@@ -336,6 +339,10 @@ window.addEventListener("load", function(){
             t.classList.add("warning-box")
         }
     });
+    
+    /*******************************************************************************/
+    /* 휴대 전화                                                                   */
+    /******************************************************************************/
 
     /* 
      * 휴대 전화 입력란 선택 해제 이벤트
@@ -347,14 +354,14 @@ window.addEventListener("load", function(){
             if(e.target.parentElement.parentElement.getElementsByClassName(warningStrTel).length == 0)
                 e.target.parentElement.parentElement.appendChild(warningStrTel)
         }
-
+    
     });
-
+    
     /* 
      * 휴대 전화 번호 입력란 입력 이벤트
      */
     tel.addEventListener("input", function(e){
-
+    
         var t = e.target;
         const num = e.target.value.replace(/\D/g, ""); // 숫자 이외의 문자 제거
         const firstPart = num.slice(0, 3);
@@ -365,7 +372,7 @@ window.addEventListener("load", function(){
         
         if (firstPart) 
             formattedNumber += firstPart;
-
+    
         if (secondPart) 
             formattedNumber += "-" + secondPart;
     
@@ -373,7 +380,7 @@ window.addEventListener("load", function(){
             formattedNumber += "-" + thirdPart;
         
         e.target.value = formattedNumber;
-
+    
         if(num.length == 11 || num.length == 12) {
             warningStrTel.innerText = ""
             t.classList.remove("warning-box")
@@ -392,21 +399,21 @@ window.addEventListener("load", function(){
         }
         
     });
-
+    
     /* 
      * 휴대폰 번호 중복 확인 클릭 이벤트
      */
     doubleBtn[1].addEventListener("click", function(e){
-
+    
         var telVal = tel.value
         
         var popWidth = 530;
         var popHeight = 220;
-
+    
         // // 팝업창 가운데 정렬
         var popupX = (window.screen.width / 2) - (popWidth / 2);
         var popupY = (window.screen.height / 2) - (popHeight / 2);
-
+    
         // 새 창 열기
         var url = "/planner/views/join/checkDuplicateTel.jsp";
         var name = "_blank"
@@ -415,13 +422,13 @@ window.addEventListener("load", function(){
                     + "left=" + popupX + ","
                     + "top=" + popupY + ","
         ;
-
+    
         var fakeModal = document.createElement("div")
         fakeModal.classList.add("modal")
         document.body.appendChild(fakeModal);
-
+    
         window.open(url + "?tel=" + telVal, name, option, true);
-
+    
     });
     
     
@@ -439,7 +446,7 @@ window.addEventListener("load", function(){
         if(year.length == 4) {
             if(t.classList.contains("warning-box"))
                 t.classList.remove("warning-box")
-
+    
             bmon.focus();
         } else {
             t.classList.add("warning-box")
@@ -461,7 +468,7 @@ window.addEventListener("load", function(){
         if(month.length == 2) {
             if(t.classList.contains("warning-box"))
                 t.classList.remove("warning-box")
-
+    
             bday.focus();
         } else {
             t.classList.add("warning-box")
@@ -476,9 +483,9 @@ window.addEventListener("load", function(){
         var t = e.target;
         const num = e.target.value.replace(/\D/g, "");
         var day = num.slice(0, 2);
-
+    
         t.value = day;
-
+    
         if(day.length != 2)
             t.classList.add("warning-box")
     
@@ -489,58 +496,59 @@ window.addEventListener("load", function(){
             // 체크(✓) 아이콘 있으면 숨기기
             if(t.parentElement.firstElementChild.nodeName == "SPAN")
                 t.parentElement.firstElementChild.classList.add("hide")
-
+    
             // 유효성 검사
             if(!checkValidation(t)) {
-
+    
                 // 문구 없으면 생성
                 if(t.parentElement.parentElement.lastElementChild.nodeName != "P")
                     t.parentElement.parentElement.appendChild(warningStrBirth)
             }
-
+    
         } else {
-
+    
             // 체크(✓) 아이콘 없으면 만들기
             if(t.parentElement.firstElementChild.nodeName != "SPAN")
                 t.parentElement.prepend(createValidIcon());
             // 있으면 숨기기 해제하기
             else
                 t.parentElement.firstElementChild.classList.remove("hide");
-
+    
             // 문구 있으면 숨기기
             if(t.parentElement.parentElement.lastElementChild.nodeName == "P")
                 t.parentElement.parentElement.lastElementChild.classList.add("hide");
             
         }
-
+    
     });
-
+    
     /* 
      * 가입 버튼 클릭 이벤트
      */
+    const form = document.querySelector("form");
     const joinBtn = document.querySelector("#join-btn");
     joinBtn.addEventListener("click", function (e) {
         e.preventDefault();
-
+    
         // 유효성 검사를 위한 입력란 배열
         const inputFields = [uid, pw, chkPw, uname, tel, byear, bmon, bday];
-
+    
         // 유효성 검사 통과 여부
         let isValidationPassed = true;
-
+    
         for(const inputField of inputFields) {
-
+    
             
             // 비밀번호 -> 문구 출력부터 나와야 함
             if (!checkValidation(inputField)) {
                 isValidationPassed = false;
-
+    
                 // 유효성 검사를 받지 않은 경우
                 if(!inputField.classList.contains("warning-box")) {
                     
                     // 입력란 테두리 빨간색 처리
                     inputField.classList.add("warning-box");
-
+    
                     if(inputField.id == "uid") {            // 아이디
                         inputField.parentNode.parentNode.appendChild(warningStrId);
                     } else if(inputField.id == "pw") {      // 비밀번호
@@ -566,41 +574,48 @@ window.addEventListener("load", function(){
                 
                 inputField.focus();
                 break;
-
+    
             } else if(!checkDouble(inputField)) {       // idk this is the right position
                 isValidationPassed = false;
-
+    
                 if(inputField.id == "uid") {            // 아이디
                     inputField.parentNode.parentNode.appendChild(warningStrId);
                 } else if(inputField.id == "tel") {     // 휴대 전화
                     inputField.parentElement.parentElement.appendChild(warningStrTel);
                 }
-
+    
                 inputField.nextElementSibling.focus();
                 break;
             }
         }
         if(isValidationPassed) {
+
+            // 폼을 전송할 주소
+            form.action = "/planner/action/insertMember.jsp";
+            form.method = "POST";
+
+            debugger
             form.submit();
         }
     });
-
-
+    
+    
     // 유효성 검사 통과 아이콘 생성
     function createValidIcon(){
         const validSpan = document.createElement("span");
         const validIcon = document.createElement("i");
-
+    
         validSpan.setAttribute("class", "valid-span")
         validIcon.setAttribute("class", "fa-solid fa-check valid")
-
+    
         validSpan.appendChild(validIcon)
         return validSpan
     }
-
+    
     // 검사 조건 문구 출력
     function printCheckConditions(t) {
-        if(t.name == "pw") {
+
+        if(t.id == "pw") {
             for(var i = 0; i < 3; i++) {
                 chkGroup = document.createElement("div");
                 chkIconArr[i] = document.createElement("i");
@@ -622,8 +637,8 @@ window.addEventListener("load", function(){
             }
     
             return chkWrapper;
-
-        } else if (t.name == "chk-pw") {
+    
+        } else if (t.id == "chk-pw") {
             chkGroup = document.createElement("div");
             chkIcon = document.createElement("i");
             chkStr = document.createElement("span");
@@ -631,24 +646,24 @@ window.addEventListener("load", function(){
             chkIcon.setAttribute("class", "fa-solid fa-xmark xmark")
             chkStr.setAttribute("class", "check")
             chkStr.innerText = "확인을 위해 위에서 입력한 비밀번호를 다시 입력하세요."
-
+    
             chkGroup.appendChild(chkIcon)
             chkGroup.appendChild(chkStr)
-
+    
             return chkGroup;
         }
     
     }
-
-
+    
+    
     /*******************************************************************************/
     /* 유효성 검사                                                                 */
     /******************************************************************************/
     function checkValidation(t) {
-
+    
         var str = t.value
         
-        if(t.name == "uid") {                   // 아이디
+        if(t.id == "uid") {                   // 아이디
             if(!str.trim()) {
                 warningStrId.innerText = "아이디를 입력하세요.";
             } else if(!checkEmail(str)) {
@@ -658,38 +673,39 @@ window.addEventListener("load", function(){
             } else {
                 return true;
             }
-        } else if(t.name == "pw") {            // 비밀번호
 
+        } else if(t.id == "pw") {            // 비밀번호
+    
             // 검사 문구가 없는 경우
             if(t.nextElementSibling == null) {
                 printCheckConditions(t);
             }
-
+    
             // 1번 조건
             if(!checkPasswordCombo(str) || !str.trim()) {
-
+    
                 if(chkIconArr[0].classList.contains("fa-check")) {
                     // 아이콘 교체: ✓ 빼고 x
                     chkIconArr[0].classList.remove("fa-check", "pass");
                     chkIconArr[0].classList.add("fa-xmark", "xmark");
                 }
-
+    
                 // 문구 색상 변경: 초록에서 빨강으루
                 chkIconArr[0].classList.add("warning");
                 chkStrArr[0].classList.remove("pass");
                 chkStrArr[0].classList.add("warning");
-
+    
             } else {
-
+    
                 // 아이콘 교체: x 빼고 ✓
                 chkIconArr[0].classList.remove("fa-xmark", "xmark", "warning");
                 chkIconArr[0].classList.add("fa-check", "pass");
-
+    
                 // 문구 색상 변경: 빨강에서 초록으루
                 chkStrArr[0].classList.remove("warning");
                 chkStrArr[0].classList.add("pass");
             }
-
+    
             // 2번 조건
             if(!checkRepeatChar(str)) {
                 if(chkIconArr[1].classList.contains("fa-check")) {
@@ -710,7 +726,7 @@ window.addEventListener("load", function(){
                 chkStrArr[1].classList.remove("warning")
                 chkStrArr[1].classList.add("pass")
             }
-
+    
             // 3번 조건
             if(t.value == uid.value) {
                 if(chkIconArr[2].classList.contains("fa-check")) {
@@ -726,22 +742,22 @@ window.addEventListener("load", function(){
                 // 아이콘 교체: x 빼고 ✓
                 chkIconArr[2].classList.remove("fa-xmark", "xmark", "warning")
                 chkIconArr[2].classList.add("fa-check", "pass")
-
+    
                 // 문구 색상 변경: 빨강에서 초록으루
                 chkStrArr[2].classList.remove("warning")
                 chkStrArr[2].classList.add("pass")
             }
-
+    
             if(checkPasswordCombo(str) && checkRepeatChar(str) && t.value != uid.value)
                 return true;
-
-        } else if(t.name == "chk-pw") {         // 비밀번호 확인
-
+    
+        } else if(t.id == "chk-pw") {         // 비밀번호 확인
+    
             // 검사 문구가 없는 경우
             if(t.nextElementSibling == null) {
                 printCheckConditions(t);
             }
-
+    
             if(!str.trim())
                 chkStr.innerText = "확인을 위해 위에서 입력한 비밀번호를 다시 입력하세요."
             else if (t.value != pw.value)
@@ -753,11 +769,11 @@ window.addEventListener("load", function(){
             }
             chkIcon.classList.add("warning")
             chkStr.classList.add("warning")
-
+    
             if(!!t.value && t.value == pw.value)
                 return true;
-
-        } else if(t.name == "uname") {           // 이름
+    
+        } else if(t.id == "uname") {           // 이름
             if(!str.trim()) {
                 warningStrName.innerText = "이름을 입력하세요."
             } else if(!checkName(str)) {
@@ -765,7 +781,7 @@ window.addEventListener("load", function(){
             } else {
                 return true;
             }
-        } else if(t.name == "tel") {            // 휴대 전화
+        } else if(t.id == "tel") {            // 휴대 전화
             if(!str.trim()) {
                 warningStrTel.innerText = "휴대폰 번호를 입력하세요."
             } else if(str.length < 11) {
@@ -774,32 +790,32 @@ window.addEventListener("load", function(){
                 return true;
             }
         } else {                                // 생일
-            if(!byear.innerHTML.trim() || !bmon.innerHTML.trim() || !bday.innerHTML.trim()) {
+            if(!byear.value.trim() || !bmon.value.trim() || !bday.value.trim()) {
                 warningStrBirth.innerHTML = "생년월일을 입력하세요.";
-            } else if (byear.innerHTML < 4 || bmon.innerHTML < 2 || bday.innerHTML < 2) {
+            } else if (byear.value < 4 || bmon.value < 2 || bday.value < 2) {
                 warningStrBirth.innerHTML = "생년월일 숫자를 정확하게 입력하세요.";
             } else {
                 return true;
             }
         }
-
+    
         return false;
     }
-
+    
     // 이메일 형식 체크
     function checkEmail(str) {                                                 
         const reg_email = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
-
+    
         return reg_email.test(str);
     }
-
+    
     // 비밀번호 형식 체크
     function checkPasswordCombo(str) {                                                 
         const reg_pass = /^(?!((?:[A-Za-z]+)|(?:[~!@#$%^&*()_+=]+)|(?:[0-9]+))$)[A-Za-z\d~!@#$%^&*()_+=]{8,20}$/;
         
         return reg_pass.test(str);
     }
-
+    
     // 연속된 문자/숫자 체크
     function checkRepeatChar(str) {
         const reg_repeat = /(\w)\1\1/;
@@ -810,10 +826,10 @@ window.addEventListener("load", function(){
     // 이름 체크
     function checkName(str) {                                                 
         const reg_name = /^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ]{3,15}$/;
-
+    
         return reg_name.test(str);
     }
-
+    
     // 중복 확인 여부 확인
     function checkDouble(t) {
         if(t.name == "uid") {               // 아뒤
@@ -827,22 +843,22 @@ window.addEventListener("load", function(){
                 return false;
             }
         }
-    }
 
+        return true;
+    }
+    
     // 중복 확인 버튼 활성화
     function activateButton(t) {
         var doubleBtn = t.nextElementSibling;
         doubleBtn.classList.add("active");
         doubleBtn.removeAttribute("disabled")
     }
-
+    
     // 중복 확인 버튼 비활성화
     function disabledButton(t) {
         var doubleBtn = t.nextElementSibling;
         doubleBtn.classList.remove("active");
-
+    
         doubleBtn.disabled = true;
     }
-
-
-});
+}
