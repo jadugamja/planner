@@ -5,11 +5,11 @@ window.addEventListener("load", function(){
     const succ = document.querySelector(".success-window");
     const fail = document.querySelector(".failure-window");
     var parent = window.opener;
-    var uid = document.querySelector(".result").value;
+    var uid = document.querySelector(".result-txt").innerHTML;
 
     if(uid == "")          // 실패
         fail.classList.remove("hide");
-    else                        // 성공
+    else                   // 성공
         succ.classList.remove("hide");
 
     /* 
@@ -21,7 +21,7 @@ window.addEventListener("load", function(){
 
         // 부모창 dim 화면 끄기
         parent.document.querySelector(".modal").remove();
-        // 로그인 화면으로 꼬!
+        // 로그인
         opener.location.href = "../../index.jsp";
         // 자식창 닫기
         window.self.close();
@@ -36,7 +36,7 @@ window.addEventListener("load", function(){
 
         // 부모창 dim 화면 끄기
         parent.document.querySelector(".modal").remove();
-        // 비밀번호 찾기 화면으로 꼬!
+        // 비밀번호 찾기
         opener.location.href = "findPw.jsp";
         // 자식창 닫기
         window.self.close();

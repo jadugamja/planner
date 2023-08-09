@@ -3,8 +3,6 @@ window.onload = function() {
     const uname = document.querySelector("#uname");
     const tel = document.querySelector("#tel");
     
-    const doubleBtn = document.querySelectorAll(".double-chk-btn");
-    
     // 유효성 검사 결과 실패 문구
     const warningStrId = document.createElement("p");
     const warningStrName = document.createElement("p");
@@ -115,9 +113,10 @@ window.onload = function() {
     /* 
      * 아이디 중복 확인 클릭 이벤트
      */
-    doubleBtn[0].addEventListener("click", function(e){
+    const doubleBtn = document.querySelectorAll(".double-chk-btn");
+    doubleBtn[0].addEventListener("click", function() {
     
-        var idVal = uid.value
+        var idVal = uid.value;
         
         var popWidth = 530;
         var popHeight = 220;
@@ -498,11 +497,25 @@ window.onload = function() {
                 t.parentElement.firstElementChild.classList.add("hide")
     
             // 유효성 검사
-            if(!checkValidation(t)) {
+            if(!checkValidation(t)) {   // 실패~~
     
                 // 문구 없으면 생성
                 if(t.parentElement.parentElement.lastElementChild.nodeName != "P")
                     t.parentElement.parentElement.appendChild(warningStrBirth)
+
+            } else {                    // 통과!
+
+                // 입력란 빨간색 테두리 해제 
+                if(t.classList.contains("warning-box"))
+                    t.classList.remove("warning-box")
+
+                // 유효성 검사 결과 문구 숨김
+                if(t.parentElement.parentElement.lastElementChild.nodeName == "P")
+                    t.parentElement.parentElement.lastElementChild.remove();
+
+                // 체크(✓) 아이콘 없으면 만들기
+                if(t.parentElement.firstElementChild.classList.contains("hide"))
+                    t.parentElement.firstElementChild.classList.remove("hide");
             }
     
         } else {
@@ -521,6 +534,7 @@ window.onload = function() {
         }
     
     });
+
     
     /* 
      * 가입 버튼 클릭 이벤트
@@ -528,6 +542,7 @@ window.onload = function() {
     const form = document.querySelector("form");
     const joinBtn = document.querySelector("#join-btn");
     joinBtn.addEventListener("click", function (e) {
+        
         e.preventDefault();
     
         // 유효성 검사를 위한 입력란 배열
@@ -538,8 +553,7 @@ window.onload = function() {
     
         for(const inputField of inputFields) {
     
-            
-            // 비밀번호 -> 문구 출력부터 나와야 함
+            // 유효성 검사 실행
             if (!checkValidation(inputField)) {
                 isValidationPassed = false;
     
@@ -571,7 +585,6 @@ window.onload = function() {
                         }
                     }
                 }
-                
                 inputField.focus();
                 break;
     
@@ -588,13 +601,21 @@ window.onload = function() {
                 break;
             }
         }
+
         if(isValidationPassed) {
+
+            // 폼 데이터 받기
+            // var formData = new FormData(form);
+            // 폼 데이터에 birth 값 추가
+            // formData.append("birth", byear.value + "-" + bmon.value + "-" + bday.value);
+
+            // 그냥 input type hidden 태그 추가 후 값 넣어줌
+            const brith = document.querySelector("input[name='birth']");
+            brith.value = byear.value + "-" + bmon.value + "-" + bday.value;
 
             // 폼을 전송할 주소
             form.action = "/planner/action/insertMember.jsp";
             form.method = "POST";
-
-            debugger
             form.submit();
         }
     });
@@ -792,7 +813,7 @@ window.onload = function() {
         } else {                                // 생일
             if(!byear.value.trim() || !bmon.value.trim() || !bday.value.trim()) {
                 warningStrBirth.innerHTML = "생년월일을 입력하세요.";
-            } else if (byear.value < 4 || bmon.value < 2 || bday.value < 2) {
+            } else if (byear.value.length < 4 || bmon.value.length < 2 || bday.value.length < 2) {
                 warningStrBirth.innerHTML = "생년월일 숫자를 정확하게 입력하세요.";
             } else {
                 return true;
@@ -851,7 +872,7 @@ window.onload = function() {
     function activateButton(t) {
         var doubleBtn = t.nextElementSibling;
         doubleBtn.classList.add("active");
-        doubleBtn.removeAttribute("disabled")
+        doubleBtn.removeAttribute("disabled");
     }
     
     // 중복 확인 버튼 비활성화

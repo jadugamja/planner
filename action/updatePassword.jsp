@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html" pageEncoding="utf-8" %>
 <%@ page import="java.sql.*" %>
+<%@ include file="checkValidity.jsp" %>
 
 <%
     // 인코딩 설정
@@ -10,19 +11,20 @@
     String username = "stageus";
     String password = "1234";
 
-    // 값 받기
-    String edited = request.getParameter("edited");
-    String editedTime = request.getParameter("edited-time");
-    String pid = request.getParameter("pid");
-
-    System.out.println("값 받아오나 테스트트");
-    System.out.println(" edited      :::: " + edited);
-    System.out.println(" editedTime  :::: " + editedTime);
-    System.out.println(" pid ???????? :::: " + pid);
-
     Connection conn = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
+
+    // 값 받기
+    String idVal = request.getParameter("uid");
+    String pwVal = request.getParameter("pw");
+
+    boolean isValid = true;
+
+    // 유효성 검사
+    if(!checkPasswordCombo(pwVal) || pwVal.trim().equals("") || !checkRepeatChar(pwVal) || pwVal.equals(idVal)) {
+        isValid = false;
+    }
 
     try {
 
@@ -33,16 +35,14 @@
         conn = DriverManager.getConnection(url, username, password);
 
         // 쿼리 만들기 
-        String sql = "UPDATE plan p " +
+        String sql = "UPDATE `user` u " +
                      "SET " +
-                     "  p.title = ?, " +
-                     "  p.start_time = ? " +
-                     "WHERE p.id = ?;";
+                     "  u.pw = ? " +
+                     "WHERE u.id = ?; ";
 
         pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, edited);
-        pstmt.setString(2, editedTime);
-        pstmt.setString(3, pid);
+        pstmt.setString(1, pwVal);
+        pstmt.setString(2, idVal);
 
         // SQL 전송
         pstmt.executeUpdate();
@@ -57,7 +57,7 @@
             rs.close();
         }
         if (pstmt != null) {
-            pstmt.close();
+           pstmt.close();
         }
         if (conn != null) {
             conn.close();
@@ -71,7 +71,9 @@
 </head>
 <body>
     <script>
-        alert("수정되었습니다")
-        window.location.href = "../views/plan/list.jsp";
+        if(<%= isValid %>)
+            window.location.href = "/planner/index.jsp";
+        else
+            history.go(-1);
     </script>
 </body>

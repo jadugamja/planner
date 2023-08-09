@@ -28,8 +28,8 @@ window.addEventListener("load", function(){
         if(parentTel.parentElement.nextElementSibling != null)
             parentTel.parentElement.nextElementSibling.remove();
         
-        // 입력란 비활성화
-        parentTel.disabled = true;
+        // 입력란 읽기 전용으로 전환
+        parentTel.readOnly = true;
 
         // 버튼 비활성화
         disabledButton(parentTel)
@@ -40,28 +40,30 @@ window.addEventListener("load", function(){
         window.self.close();
     });
 
-
     /* 
      * 취소 버튼 클릭 이벤트
      */
-    const cancelBtn = document.querySelector(".cancel-btn");
-    cancelBtn.addEventListener("click", function(e){
-        haveClicked = true;
-
-        // 유효성 검사 결과 문구 있으면 제거
-        if(parentTel.parentElement.nextElementSibling != null)
-            parentTel.parentElement.nextElementSibling.remove();
-        parentTel.value = "";
-        parentTel.focus();
+    const cancelBtns = document.querySelectorAll(".cancel-btn");
+    cancelBtns.forEach((cancelBtn) => {
+        cancelBtn.addEventListener("click", function(e){
+            haveClicked = true;
+    
+            // 유효성 검사 결과 문구 있으면 제거
+            if(parentTel.parentElement.nextElementSibling != null)
+                parentTel.parentElement.nextElementSibling.remove();
+            parentTel.value = "";
+            parentTel.focus();
+            
+            // 버튼 비활성화
+            disabledButton(parentTel)
+    
+            // 부모창 dim 화면 끄기
+            parent.document.querySelector(".modal").remove();
+            // 자식창 닫기
+            window.self.close();
+            e.stopImmediatePropagation();
+        });
         
-        // 버튼 비활성화
-        disabledButton(parentTel)
-
-        // 부모창 dim 화면 끄기
-        parent.document.querySelector(".modal").remove();
-        // 자식창 닫기
-        window.self.close();
-        e.stopImmediatePropagation();
     });
 
     // 유효성 검사 통과 아이콘 생성

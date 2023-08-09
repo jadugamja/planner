@@ -204,7 +204,6 @@ window.addEventListener("load", function(){
         document.body.appendChild(fakeModal);
 
         window.open(url + "?uname=" + nameVal + "&tel=" + telVal, name, option, true);
-
     }
     
 });

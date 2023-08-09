@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html" pageEncoding="utf-8" %>
 <%@ page import="java.sql.*" %>
-
 <%
     // 인코딩 설정
     request.setCharacterEncoding("utf-8");
@@ -10,15 +9,18 @@
     String username = "stageus";
     String password = "1234";
 
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+
     // 값 받기
     int category = Integer.parseInt(request.getParameter("categories"));
     String date = request.getParameter("date");
     String time = request.getParameter("time");
     String title = request.getParameter("title");
 
-    Connection conn = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
+    // 세션 값 불러오기
+    String uid = session.getAttribute("uid") != null ? (String)session.getAttribute("uid") : "";
 
     try {
 
@@ -28,15 +30,16 @@
         // DB 연결
         conn = DriverManager.getConnection(url, username, password);
 
-        // 쿼리 만들기 (제발.. INSERT에 alias 불가!!!!)
+        // 쿼리 만들기
         String sql = "INSERT INTO plan (user_id, categories , date, start_time, title) " +
-                     "VALUES ('test@email.com', ?, ?, ?, ?);";
+                     "VALUES (?, ?, ?, ?, ?);";
 
         pstmt = conn.prepareStatement(sql);
-        pstmt.setInt(1, category);
-        pstmt.setString(2, date);
-        pstmt.setString(3, time);
-        pstmt.setString(4, title);
+        pstmt.setString(1, uid);
+        pstmt.setInt(2, category);
+        pstmt.setString(3, date);
+        pstmt.setString(4, time);
+        pstmt.setString(5, title);
 
         // SQL 전송
         pstmt.executeUpdate();
@@ -58,7 +61,6 @@
         }
     }
 %>
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -66,9 +68,7 @@
 </head>
 <body>
     <script>
-        alert("일정이 추가되었습니다~~")
         window.self.close();
         window.opener.location.reload();        
     </script>
 </body>
-</html>

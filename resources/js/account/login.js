@@ -1,10 +1,9 @@
-window.addEventListener('load', function(){
+window.onload = function() {
     
     const warningStrId = document.createElement("p");
     const warningStrPw = document.createElement("p");
     warningStrId.setAttribute("class", "warning");
     warningStrPw.setAttribute("class", "warning");
-    
     
     /* 
     * 홈 버튼 클릭 이벤트
@@ -26,14 +25,17 @@ window.addEventListener('load', function(){
         location.href = "views/join/join.jsp";
     }
 
-    // 페이지 로드 시 아이디 입력란 선택
+    // ★ 페이지 로드 시 ★ 아이디 입력란 선택
     const uid = document.querySelector('#uid');
+    const pw = document.querySelector('#pw');
+    // uid.value = document.querySelector("#sessionId").value != "" ? document.querySelector("#sessionId").value : "";
+    // pw.value = document.querySelector("#sessionPw").value != "" ? document.querySelector("#sessionPw").value : "";
     uid.focus();
 
     /* 
     * 아이디 입력란 선택 해제 이벤트
     */
-    uid.addEventListener("blur", function(e){
+    uid.addEventListener("change", function(e){
         var t = e.target
         var lastElem = t.parentNode.lastElementChild;
 
@@ -52,7 +54,6 @@ window.addEventListener('load', function(){
     /* 
     * 비밀번호 입력란 선택 해제 이벤트
     */
-    const pw = document.querySelector('#pw');
     pw.addEventListener("blur", function(e){
         var t = e.target
         var lastElem = t.parentNode.lastElementChild;
@@ -96,14 +97,16 @@ window.addEventListener('load', function(){
                         inputField.parentNode.appendChild(warningStrPw);
                     }
                 }
-
                 inputField.focus();
                 break;
             }
         }
 
-        if (isValid)
+        if (isValid) {
+            form.action = "/planner/action/selectMember.jsp";
+            form.method = "POST";
             form.submit();
+        }
         
     });
 
@@ -137,5 +140,5 @@ window.addEventListener('load', function(){
 
         return reg_email.test(str);
     }
-    
-});
+
+}

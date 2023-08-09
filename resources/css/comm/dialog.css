@@ -40,7 +40,7 @@
 
 .success-window .modal-content, 
 .failure-window .modal-content {
-    flex-basis: 382px;
+    flex-basis: 430px;
 }
 
 .find-pw .modal-content {
@@ -49,11 +49,7 @@
 
 .modal-box .input-val {
     font-weight: 600;
-    margin-left: 30px;
-}
-
-.modal-box input:focus {
-    /* outline: 1px solid greenyellow */
+    margin-left: auto;
 }
 
 .modal-box input.plan-btn:hover {
@@ -125,7 +121,7 @@
 }
 
 .result-wrapper .result-txt {
-    font-weight: 600;    
+    margin-left: auto;
 }
 
 .d-btn {
@@ -147,13 +143,6 @@
 
 #category .selected-value::after {
     margin-left: 18.2em;
-}
-
-.ok-btn {
-
-}
-
-.cancel-btn {
 }
 
 .icon-face {

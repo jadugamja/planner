@@ -35,17 +35,30 @@ window.addEventListener("load", function(){
         e.target.value = limitedLength;
         length.innerHTML = e.target.value.length;
 
-
-        //if(num.length > 140) 
-        
     });
  
     /*
      * 저장 버튼 클릭 이벤트
      */
+    const date = document.querySelector("#date");
+    const time = document.querySelector("#time");
     const saveBtn = document.querySelector(".plan-save-btn");
-    saveBtn.addEventListener("click", function(){
-        sendDataToServer()
+    saveBtn.addEventListener("click", function(e){
+
+        e.preventDefault();
+        
+        // 유효성 검사 통과 여부
+        let isValid = true;
+
+        if(!title.value.trim() || title.value.length > 140 || !date.value.trim() || !time.value.trim()) {
+
+            isValid = false;
+            alert("빈 값이 존재합니다")
+            return
+        }
+
+        if(isValid)
+            sendDataToServer();
     });
     
     /* 
@@ -70,4 +83,9 @@ window.addEventListener("load", function(){
     cancelBtn.addEventListener("click", function(){
         window.self.close();
     });
+
+    function checkValidation(t) {
+        title
+    }
+
 });

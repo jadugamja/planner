@@ -25,7 +25,7 @@
     String telValue = request.getParameter("tel");
 
     // 결과값 초기화
-    String uid = "1111";
+    String uid = "";
     
     try {
 
@@ -50,10 +50,16 @@
 
         if(rs.next()){
             uid = rs.getString("id");
+
+            //if(!uid.equals("")) {
+                // 세션에 아이디, 비밀번호 값 저장
+            //  session.setAttribute("uid", uid);
+            // session.setAttribute("pw", "");
+            //}
         }
 
     } catch (SQLException e) {
-        e.getMessage();
+        e.printStackTrace();
     } finally {
         if(rs != null)
            rs.close();
@@ -75,9 +81,6 @@
     <script src="/planner/resources/js/account/findIdResult.js"></script>
 </head>
 <body>
-    <!-- 결과 넣어두기 -->
-    <input type="hidden" class="result" name="uid" value="<%= uid %>">
-    
     <!-- 성공 시 -->
     <main class="modal success-window hide">
         <div class="modal-box modal-color">
@@ -86,10 +89,8 @@
                     <span class="input-txt">다음 정보로 가입된 아이디가 있습니다.</span>
                 </div>
                 <div class="result-wrapper">
-                    <span class="result-txt">· 아이디</span>
-                    <span class="result-txt">테스트닷
-                        <!-- uid값 받아 와야 혀!!!!! -->
-                    </span>
+                    <span class="normal-txt">· 아이디</span>
+                    <span class="normal-txt result-txt"><%= uid %></span>
                 </div>
                 <div class="btn-wrapper">
                     <button class="d-btn login-btn">로그인</button>

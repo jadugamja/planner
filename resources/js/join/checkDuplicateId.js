@@ -7,8 +7,6 @@ window.addEventListener("load", function(){
     var parent = window.opener;
 
     var isExisted = document.querySelector(".result").value;
-    
-    console.log(isExisted)
 
     if(isExisted == 1)          // 실패
         fail.classList.remove("hide");
@@ -25,12 +23,14 @@ window.addEventListener("load", function(){
 
         parentUid.parentElement.before(createValidIcon());
         parentUid.parentElement.previousElementSibling.lastElementChild.classList.add("right");
+        
         // 유효성 검사 결과 문구 있으면 제거
         if(parentUid.parentElement.nextElementSibling != null)
             parentUid.parentElement.nextElementSibling.remove();
         
-        // 입력란 비활성화
-        parentUid.disabled = true;
+        // 입력란 읽기 전용으로 전환
+        parentUid.readOnly = true;
+        
         // 버튼 비활성화
         disabledButton(parentUid);
         
@@ -40,27 +40,28 @@ window.addEventListener("load", function(){
         window.self.close();
     });
 
-
     /* 
      * 취소 버튼 클릭 이벤트
      */
-    const cancelBtn = document.querySelector(".cancel-btn");
-    cancelBtn.addEventListener("click", function(e){
-        haveClicked = true;
-
-        // 유효성 검사 결과 문구 있으면 제거
-        if(parentUid.parentElement.nextElementSibling != null)
-            parentUid.parentElement.nextElementSibling.remove();
-        parentUid.value = "";
-        parentUid.focus();
-
-        // 버튼 비활성화
-        disabledButton(parentUid);
-        
-        // 부모창 dim 화면 끄기
-        parent.document.querySelector(".modal").remove();
-        // 자식창 닫기
-        window.self.close();
+    const cancelBtns = document.querySelectorAll(".cancel-btn");
+    cancelBtns.forEach((cancelBtn) => {
+        cancelBtn.addEventListener("click", function(e){
+            haveClicked = true;
+    
+            // 유효성 검사 결과 문구 있으면 제거
+            if(parentUid.parentElement.nextElementSibling != null)
+                parentUid.parentElement.nextElementSibling.remove();
+            parentUid.value = "";
+            parentUid.focus();
+    
+            // 버튼 비활성화
+            disabledButton(parentUid);
+            
+            // 부모창 dim 화면 끄기
+            parent.document.querySelector(".modal").remove();
+            // 자식창 닫기
+            window.self.close();
+        });
     });
 
     // 유효성 검사 통과 아이콘 생성

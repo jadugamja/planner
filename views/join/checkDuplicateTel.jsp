@@ -35,9 +35,7 @@
         conn = DriverManager.getConnection(url, username, password);
         
         // 쿼리
-        String sql = "SELECT count(1) AS cnt" +
-                     "FROM `user` u " +
-                     "WHERE u.tel = ?; ";
+        String sql = "SELECT count(1) AS cnt FROM `user` u WHERE u.tel = ?;";
 
         query = conn.prepareStatement(sql);
         query.setString(1, telValue);
@@ -45,8 +43,6 @@
         // 쿼리 전송 및 결과 받기
         rs = query.executeQuery();
 
-        System.out.println("rs ::::::::::::::::::: " + rs);
-        System.out.println("rs ::::::::::::::::::: " + rs.getInt("cnt"));
         if(rs.next()){
             isExisted = rs.getInt("cnt");
         }
@@ -85,7 +81,7 @@
                     <span class="input-val"><%= telValue %></span>
                 </div>
                 <div class="result-wrapper">
-                    <span class="result-txt">사용 가능한 아이디입니다.</span>
+                    <span class="result-txt left">사용 가능한 번호입니다.</span>
                     <i class="fa-regular fa-face-smile icon-face"></i>
                 </div>
                 <div class="btn-wrapper">
@@ -106,7 +102,7 @@
                     <span class="input-val"><%= telValue %></span>
                 </div>
                 <div class="result-wrapper">
-                    <span class="result-txt">이미 사용 중인 아이디입니다.</span>
+                    <span class="result-txt left">이미 사용 중인 번호입니다.</span>
                     <i class="fa-solid fa-face-frown icon-face"></i>
                 </div>
                 <div class="btn-wrapper">

@@ -17,19 +17,16 @@
     ResultSet rs = null;
 
     // 값 받기
-    String uid = request.getParameter("uid");                       // 아이디(이메일)
-    String pw = request.getParameter("pw");                         // 비밀번호
-    String uname = request.getParameter("uname");                   // 이름
-    String tel = request.getParameter("tel");                       // 휴대 전화
-    String birth = request.getParameter("birth");                   // 생년월일
-    int type = Integer.parseInt(request.getParameter("utype"));     // 회원 유형
+    String uid = request.getParameter("uid");   // 아이디(이메일)
+    String pw = request.getParameter("pw");     // 비밀번호
 
     boolean isValid = true;
+    boolean isUser = false;
+    int isAdmin = 0;
 
     // 유효성 검사
     if(uid.trim().equals("") || !checkEmail(uid) || uid.length() > 50 ||
-        !checkPasswordCombo(pw) || pw.trim().equals("") || !checkRepeatChar(pw) || pw.equals(uid) ||
-        uname.trim().equals("") || !checkName(uname)) {
+        !checkPasswordCombo(pw) || pw.trim().equals("") || !checkRepeatChar(pw) || pw.equals(uid)) {
         isValid = false;
     }
 
@@ -41,24 +38,26 @@
         conn = DriverManager.getConnection(url, username, password);
 
         // 쿼리 만들기
-        String sql = "INSERT INTO `user` (id, pw, name, tel, birth, type) " +
-                     "VALUES (?, ?, ?, ?, ?, ?); ";
+        String sql = "SELECT u.`type` AS type " +
+                     "FROM `user` u " +
+                     "WHERE u.id = ? " +
+                     "AND u.pw = ? ";
 
         pstmt = conn.prepareStatement(sql);
-
         pstmt.setString(1, uid);
         pstmt.setString(2, pw);
-        pstmt.setString(3, uname);
-        pstmt.setString(4, tel);
-        pstmt.setString(5, birth);
-        pstmt.setInt(6, type);
 
-        // SQL 전송
-        pstmt.executeUpdate();
+        // 쿼리 전송 및 결과 받기
+        rs = pstmt.executeQuery();
 
-        // 세션에 아이디, 비밀번호 값 저장
-        // request.setAttribute("uid", uid);
-        // request.setAttribute("pw", pw);
+        if(rs.next()) {
+            isUser = true;
+            isAdmin = rs.getInt("type");
+
+            // 세션에 아이디 값, 권한 저장
+            session.setAttribute("uid", uid);
+            session.setAttribute("isAdmin", isAdmin);
+        }
 
     } catch(SQLException e) {
 
@@ -80,13 +79,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>회원 가입 성공!</title>
+    <title>ㄱㄱ일정 전체 목록ㄱㄱ</title>
 </head>
 <body>
     <script>
-        if(<%= isValid %>)
-            window.location.href = "/planner/index.jsp";
-        else
+        if(<%=isValid%> && <%=isUser%>) {
+            window.location.href = "/planner/views/plan/list.jsp";
+        } else if(!<%=isUser%>){
+            alert("아이디 또는 비밀번호가 일치하지 않습니다.");
             history.go(-1);
+        } else {
+            alert("아이디 또는 비밀번호를 정확히 입력했는지 확인하세요.");
+            history.go(-1);
+        }
     </script>
 </body>

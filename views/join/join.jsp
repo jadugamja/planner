@@ -69,14 +69,15 @@
                     </div>
                 </div>
                 <div class="item-wrapper">
+                    <input type="hidden" name="birth" />
                     <label for="birth" class="label-txt">생년월일</label>
                     <div id="birth" class="birth">
                         <!-- 연도 -->
-                        <input type="text" name="birth" id="b-year" class="input-box input-txt birth-box" placeholder="년" />
+                        <input type="text" id="b-year" class="input-box input-txt birth-box" placeholder="년" />
                         <!-- 월 -->
-                        <input type="text" name="birth" id="b-month" class="input-box input-txt birth-box" placeholder="월" />
+                        <input type="text" id="b-month" class="input-box input-txt birth-box" placeholder="월" />
                         <!-- 일 -->
-                        <input type="text" name="birth" id="b-day" class="input-box input-txt birth-box" placeholder="일" />
+                        <input type="text" id="b-day" class="input-box input-txt birth-box" placeholder="일" />
                     </div>
                 </div>
                 <input type="submit" id="join-btn" class="btn square-btn login-btn" value="가입하기" />

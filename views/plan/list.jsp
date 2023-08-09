@@ -8,6 +8,7 @@
 <%@ page import="java.util.TreeSet" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ include file="../../action/selectUserList.jsp" %>
 
 <%
     // 인코딩 설정
@@ -18,11 +19,16 @@
     String username = "stageus";
     String password = "1234";
 
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+
     // 현재 날짜 추출 및 대입
     LocalDate now = LocalDate.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
     DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MM");
 
+    // 현재 날짜 세팅
     String yearMonth = now.format(formatter);
     String mon = Integer.parseInt(now.format(monthFormatter)) < 10 ? now.format(monthFormatter).substring(1) + "월" : now.format(monthFormatter) + "월";
     
@@ -32,15 +38,20 @@
         mon = Integer.parseInt(yearMonth.split("-")[1]) < 10 ? yearMonth.split("-")[1].substring(1) + "월" : yearMonth.split("-")[1] + "월";
     }
 
-    Connection conn = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
+    String year = yearMonth.split("-")[0];
 
+    // 세션 값 불러오기
+    String uid = session.getAttribute("uid") != null ? (String)session.getAttribute("uid") : "";
+    int isAdmin = session.getAttribute("isAdmin") != null && session.getAttribute("isAdmin") instanceof Integer ? (int)session.getAttribute("isAdmin") : 0;
+
+    List<List<String>> rsList = new ArrayList<>();
+    if(isAdmin == 1) {
+        rsList = selectUserList();
+    }
+    
     // 결과값 넣을 리스트 생성
     List<Map> planList = new ArrayList<Map>();
-    
     Map<String, Object> map;
-    
 
     try {
         // Connector 파일 불러와서 MariaDB 연결
@@ -72,10 +83,12 @@
                         "FROM plan p " +
                         "JOIN `user` u ON u.id = p.user_id " +
                         "WHERE u.del_yn != 1 AND p.del_yn != 1 AND DATE_FORMAT(p.`date`, '%Y-%m') = ? " +
-                        "ORDER BY p.`date`, p.start_time, p.id;";        
+                        "AND u.id = ?  " +
+                        "ORDER BY p.`date`, p.start_time, p.id;";
         
         pstmt = conn.prepareStatement(query);
         pstmt.setString(1, yearMonth);
+        pstmt.setString(2, uid);
 
         rs = pstmt.executeQuery();
         
@@ -125,9 +138,18 @@
     <link rel="stylesheet" type="text/css" href="/planner/resources/css/join/join.css">
     <link rel="stylesheet" type="text/css" href="/planner/resources/css/comm/dialog.css">
     <link rel="stylesheet" type="text/css" href="/planner/resources/css/plan/list.css">
+    <script>
+        if(<%= uid.length() %> == 0) 
+            window.location.href = "/planner/index.jsp";
+    </script>
     <script src="/planner/resources/js/plan/list.js"></script>
+    <script src="/planner/resources/js/plan/aside.js"></script>
 </head>
 <body>
+    <!-- 현재 로그인 아이디 -->
+    <input type="hidden" class="rsList" value="<%= rsList %>" />
+    <input type="hidden" class="login-id" value="<%= uid %>" />
+
     <!-- 헤더 -->
     <header>
         <div class="logo">
@@ -151,20 +173,27 @@
                 <!-- 날짜 검색 영역 -->
                 <div class="date-wrapper">
                     <button class="today-btn" value="today">오늘</button>
+                    
+                    <%-- 연도 --%>
                     <div class="year-wrapper">
                         <button type="button" class="go-year-btn go-prev-year">
                             <i class="fa-solid fa-angle-left"></i>
                         </button>
-                        <span class="year"></span>
+                        <span class="year"><%= year %>년</span>
                         <button type="button" class="go-year-btn go-next-year">
                             <i class="fa-solid fa-angle-right"></i>
                         </button>
                     </div>
+                    <%-- //연도 --%>
+
+                    <%-- 월 --%>
                     <div class="select" id="month">
                         <div class="selected between-justified box-padding">
                             <span class="selected-value"><%= mon %></span>
                         </div>
                     </div>
+                    <%-- //월 --%>
+
                 </div>
                 <!-- //날짜 검색 영역 -->
 

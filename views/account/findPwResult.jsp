@@ -24,7 +24,7 @@
     String idValue = request.getParameter("uid");
 
     // 결과값 초기화
-    String pw = "adfa";
+    String pw = "";
     
     try {
 
@@ -47,6 +47,7 @@
 
         if(rs.next()){
             pw = rs.getString("pw");
+            request.setAttribute("pw", pw);
         }
 
     } catch (SQLException e) {

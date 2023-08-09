@@ -300,8 +300,8 @@ input.plan {
     left: 81%;
     /* width: 24.2em; */
     width: 22.2em;
-    /* ★★★★★임시★★★★★ */
-    height: 45em;
+
+    height: max-content;
     padding: 9px;
     transition: all 0.5s ease;
 
@@ -309,6 +309,7 @@ input.plan {
     border-radius: 5px;
     background-color: #E2E8F0;
     box-shadow: 1px 3px 7px 3px hsla(213, 12%, 30%, .24);
+    z-index: 9;
 }
 
 .info-box {
@@ -316,6 +317,7 @@ input.plan {
     background-color: #F8FAFD;
 
     padding: 26px 32px;
+    overflow-y: auto;
 }
 
 .info-box + .info-box {
@@ -411,12 +413,15 @@ input.plan {
 }
 
 .logout {
-    margin-top: 25px;
-    margin-left: 30px;
+    margin: 21px 0 13px 30px;
 
     font-size: 19px;
     font-weight: 500;
     letter-spacing: 1px;
+}
+
+.logout span {
+    cursor: pointer;
 }
 
 /**********************************************/

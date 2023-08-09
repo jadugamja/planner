@@ -1,4 +1,10 @@
 <%@ page language="java" contentType="text/html" pageEncoding="utf-8" %>
+
+<%
+    // 세션 값 불러오기
+    String uid = session.getAttribute("uid") != null ? (String)session.getAttribute("uid") : "";
+    int isAdmin = session.getAttribute("isAdmin") != null && session.getAttribute("isAdmin") instanceof Integer ? (int)session.getAttribute("isAdmin") : 0;
+%>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +15,10 @@
     <link rel="stylesheet" type="text/css" href="/planner/resources/css/join/join.css">
     <link rel="stylesheet" type="text/css" href="/planner/resources/css/plan/list.css">
     <link rel="stylesheet" type="text/css" href="/planner/resources/css/comm/dialog.css">
+    <script>
+        if(<%= uid.length() %> == 0) 
+            window.location.href = "/planner/index.jsp";
+    </script>
     <script src="/planner/resources/js/comm/dialog.js"></script>
     <script src="/planner/resources/js/plan/insert.js"></script>
 </head>
@@ -33,7 +43,7 @@
                 </div>
                 <div class="table-aligned">
                     <label for="title" class="font-medium ratio-20">제목</label>
-                    <input type="text" id="title" name="title" class="input-box ratio-80 input-txt" />
+                    <input type="text" id="title" name="title" class="input-box ratio-80 input-txt" maxlength="140" />
                     <div class="right limited-text-length">
                         <span id="text-length"></span>
                         <span>/140</span>

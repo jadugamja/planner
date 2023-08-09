@@ -1,9 +1,5 @@
 <%@ page language="java" contentType="text/html" pageEncoding="utf-8" %>
-<%@ page import="java.sql.DriverManager" %>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.PreparedStatement" %>
-<%@ page import="java.sql.ResultSet" %>
-<%@ page import="java.sql.SQLException" %>
+<%@ page import="java.sql.*" %>
 <%@ page import="javax.servlet.*" %>
 <%@ page import="javax.servlet.http.*" %>
 
@@ -35,9 +31,7 @@
         conn = DriverManager.getConnection(url, username, password);
         
         // 쿼리
-        String sql = "SELECT count(1) AS cnt" +
-                     "FROM `user` u " +
-                     "WHERE u.id = ?; ";
+        String sql = "SELECT count(1) AS cnt FROM `user` u WHERE u.id = ?;";
 
         query = conn.prepareStatement(sql);
         query.setString(1, idValue);
@@ -45,14 +39,15 @@
         // 쿼리 전송 및 결과 받기
         rs = query.executeQuery();
 
-        System.out.println("rs ::::::::::::::::::: " + rs);
-        System.out.println("rs ::::::::::::::::::: " + rs.getInt("cnt"));
         if(rs.next()){
             isExisted = rs.getInt("cnt");
         }
 
     } catch (SQLException e) {
-        e.getMessage();
+
+        e.printStackTrace();
+        //e.getMessage();
+
     } finally {
         if(rs != null)
            rs.close();
@@ -85,7 +80,7 @@
                     <span class="input-val"><%= idValue %></span>
                 </div>
                 <div class="result-wrapper">
-                    <span class="result-txt">사용 가능한 아이디입니다.</span>
+                    <span class="result-txt left">사용 가능한 아이디입니다.</span>
                     <i class="fa-regular fa-face-smile icon-face"></i>
                 </div>
                 <div class="btn-wrapper">
@@ -106,7 +101,7 @@
                     <span class="input-val"><%= idValue %></span>
                 </div>
                 <div class="result-wrapper">
-                    <span class="result-txt">이미 사용 중인 아이디입니다.</span>
+                    <span class="result-txt left">이미 사용 중인 아이디입니다.</span>
                     <i class="fa-solid fa-face-frown icon-face"></i>
                 </div>
                 <div class="btn-wrapper">

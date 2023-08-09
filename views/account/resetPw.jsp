@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html" pageEncoding="utf-8" %>
 <%@ page import="java.sql.*" %>
+
 <%
     // 인코딩 설정
     request.setCharacterEncoding("utf-8");
@@ -16,9 +17,8 @@
     // 값 받기
     String idValue = request.getParameter("uid");
 
-    // 결과값 초기화
-    String pw = "ddd";
-    
+    String pw = "";
+
     try {
 
         // Connector 파일 불러와서 MariaDB 연결
@@ -66,7 +66,7 @@
 </head>
 <body>
     <!-- 결과 넣어두기 -->
-    <input type="hidden" class="result" name="pw" value="<%= pw %>">
+    <input type="hidden" class="result" value="<%= pw %>" disabled />
 
     <!-- 헤더 -->
     <header>
@@ -122,7 +122,7 @@
                     <div class="item-wrapper">
                         <!-- 입력란 -->
                         <label for="chk-pw" class="label-txt">비밀번호 확인</label>
-                        <input type="password" name="chk-pw" id="chk-pw" class="input-box input-txt" placeholder="비밀번호를 한 번 더 입력하세요" />
+                        <input type="password" id="chk-pw" class="input-box input-txt" placeholder="비밀번호를 한 번 더 입력하세요" />
                         <!-- //입력란 -->
 
                         <!-- 유효성 검사 문구 -->

@@ -4,8 +4,8 @@ window.onload = function() {
     var urlStr = window.location.href;
     var url = new URL(urlStr);
     const uid = url.searchParams.get("uid");
-    const prevPw = document.querySelector(".result");
-    
+    const prevPw = document.querySelector(".result").value;
+
     // 홈 버튼 클릭 이벤트
     const homeBtn = document.querySelector('.logo');
     homeBtn.onclick = function() {
@@ -15,6 +15,7 @@ window.onload = function() {
     const pw = document.querySelector("#pw");
     const chkWrapper = document.querySelector(".chk-wrapper");
     const passGroup = document.querySelectorAll(".pass-group");
+    
     // pw.focus();
     
     /* 
@@ -118,6 +119,7 @@ window.onload = function() {
      * 비밀번호 재설정하기 클릭 이벤트
      */
     const resetPwBtn = document.querySelector("#reset-pw-btn");
+    const form = document.querySelector("form");
     resetPwBtn.addEventListener("click", function(e) {
         e.preventDefault();
     
@@ -144,9 +146,16 @@ window.onload = function() {
         }
     
         if (isValid) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "uid";
+            input.value = uid;
+            form.appendChild(input);
+
+            debugger
+            form.action = "/planner/action/updatePassword.jsp";
+            form.method = "POST";
             form.submit();
-            // 임시
-            location.href = "../../index.jsp";
         }
     
     });
@@ -162,7 +171,7 @@ window.onload = function() {
     
         var str = t.value;
         
-        if(t.name == "pw") {            // 비밀번호
+        if(t.id == "pw") {            // 비밀번호
     
             // 1번 조건
             if(!checkPasswordCombo(str) || !str.trim()) {
@@ -256,7 +265,7 @@ window.onload = function() {
             if(checkPasswordCombo(str) && checkRepeatChar(str) && t.value != uid && t.value != prevPw)
                 return true;
     
-        } else if(t.name == "chk-pw") {         // 비밀번호 확인
+        } else if(t.id == "chk-pw") {         // 비밀번호 확인
     
             if(!str.trim())
                 chkStr.innerText = "확인을 위해 위에서 입력한 비밀번호를 다시 입력하세요.";

@@ -28,8 +28,7 @@ window.addEventListener("load", function(){
     lastYearBtn.addEventListener("click", function(e){
         year.innerHTML = (parseInt(year.innerHTML) - 1).toString() + "년";
         
-        // 흑흑....
-        // sendDataToServer()
+        sendDataToServer();
     });
 
     /* 
@@ -39,12 +38,15 @@ window.addEventListener("load", function(){
     nextYearBtn.addEventListener("click", function(e){
         year.innerHTML = (parseInt(year.innerHTML) + 1).toString() + "년";
 
-        // sendDataToServer()
+        sendDataToServer();
     });
 
     /* 
      * 수정 버튼 클릭 이벤트
      */
+    // input 생성
+    var editTime = document.createElement("input");
+    var editInput = document.createElement("input");
     const updateBtns = document.querySelectorAll(".upt-btn");
     updateBtns.forEach((updateBtn) => {
         
@@ -55,28 +57,27 @@ window.addEventListener("load", function(){
             var existingTime = parent.previousElementSibling.querySelector(".time").innerHTML;
             var hh;
 
+            // ???
+            var timeArr = existingTime.split(" ");
+            var hhmm = timeArr[1].split(":");
 
-            // 조건 주세요!
-            // var timeArr = existingTime.split(" ");
-            // var hhmm = timeArr[1].split(":");
-
-            // if(timeArr[0] == "오후") {
-            //     hh = parseInt(timeArr[1]) + 12;
-            //     hhmm[0] = hh;
-            //     existingTime = hhmm[0] + ":" + hhmm[1];
-            // } else if(timeArr[0] == "오전") {
-            //     existingTime = "0" + hhmm[0] + ":" + hhmm[1];
-            // }
+            if(timeArr[0] == "오후") {
+                hh = parseInt(timeArr[1]) + 12;
+                hhmm[0] = hh;
+                existingTime = hhmm[0] + ":" + hhmm[1];
+            } else if(timeArr[0] == "오전") {
+                existingTime = "0" + hhmm[0] + ":" + hhmm[1];
+            }
 
             if(parent.previousElementSibling.querySelector(".plan").classList.contains("edited-plan")) {
-                updateDataOnServer()
+
+                updateDataOnServer();
             } else {
-                // input 생성
-                var editTime = document.createElement("input");
-                var editInput = document.createElement("input");
         
                 editTime.type = "time";
                 editInput.type = "text";
+                editTime.name = "edited-time";
+                editInput.name = "edited";
                 editTime.value = existingTime;
                 editInput.value = existingValue;
                 editTime.classList.add("time", "edited-time");
@@ -96,23 +97,36 @@ window.addEventListener("load", function(){
     });
 
     /* 
-     * 서버로 데이터 보내기
+     * (서버로 데이터 보내기)
      */
     function updateDataOnServer() {
         
-        const formData = new FormData();
-        // var form = document.createElement("form");
+        // 새 폼 생성    
+        var newForm = document.createElement("form");
 
         // 수정된 값
         const edited = document.querySelector(".edited-plan").value != "" ? document.querySelector(".edited-plan").value : "임시";
         const editedTime = document.querySelector(".edited-time").value != "" ? document.querySelector(".edited-time").value : "00:00";
         const pid = document.querySelector(".edited-plan").parentElement.nextElementSibling.nextElementSibling.value;
 
+        // 
+        const inputPlan = document.createElement("input");
+        inputPlan.type = "hidden";
+        inputPlan.name = "edited";
+        inputPlan.value = edited;
+        newForm.appendChild(editTime);
+
+        // 
+        const inputTime = document.createElement("input");
+        inputTime.type = "hidden";
+        inputTime.name = "editedTime";
+        inputTime.value = editedTime;
+        newForm.appendChild(inputTime);
+
         formData.append("edited", edited);
         formData.append("edited-time", editedTime);
         formData.append("pid", pid);
 
-        var newForm = document.createElement("form");
         newForm.action = "../../action/updatePlan.jsp";
         newForm.method = "POST";
         newForm.body = formData;
@@ -120,6 +134,39 @@ window.addEventListener("load", function(){
         document.append(newForm);
         newForm.submit();
     }
+
+    /* 
+     * 삭제 버튼 클릭 이벤트
+     */
+    const delBtns = document.querySelectorAll(".del-btn");
+    delBtns.forEach((delBtn) => {
+        delBtn.addEventListener("click", function(e){
+            var pid = e.target.closest(".plan-box").lastElementChild.value;
+        
+            var popWidth = 530;
+            var popHeight = 220;
+        
+            // // 팝업창 가운데 정렬
+            var popupX = (window.screen.width / 2) - (popWidth / 2);
+            var popupY = (window.screen.height / 2) - (popHeight / 2);
+        
+            // 새 창 열기
+            var url = "/planner/views/plan/checkDelete.jsp";
+            var name = "_blank"
+            var option = "width=" + popWidth + ","
+                        + "height=" + popHeight + ","
+                        + "left=" + popupX + ","
+                        + "top=" + popupY + ","
+            ;
+        
+            var fakeModal = document.createElement("div")
+            fakeModal.classList.add("modal")
+            document.body.appendChild(fakeModal);
+        
+            window.open(url + "?pid=" + pid, name, option, true);
+    
+        });
+    });
 
     /* 
      * 일정 추가 클릭 이벤트
@@ -193,8 +240,8 @@ window.addEventListener("load", function(){
     // }
 
     /* 
-    * 서버로 값 보냄
-    */
+     * 페이지 새로고침(yearMonth)
+     */
     const form = document.querySelector("form");
     function sendDataToServer() {
 
@@ -294,13 +341,14 @@ window.addEventListener("load", function(){
     }
 
     // 현재 연도 세팅
-    setThisYear()
+    // setThisYear()
 
     // 월 콤보 박스 세팅
-    setMonthBox()
+    setMonthBox();
 
-    // 영어 -> 한자로 바꿔줌
-    convertYoilColor()
+    // 주말 색상 변경
+    convertYoilColor();
 
-    cancelFromYesterday()
+    // 취소선 긋기
+    cancelFromYesterday();
 });

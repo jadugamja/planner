@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html" pageEncoding="utf-8" %>
+<%
+    String uid = session.getAttribute("uid") != null ? (String)session.getAttribute("uid") : "";
+%>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +10,11 @@
     <link rel="stylesheet" type="text/css" href="resources/css/comm/common.css">
     <link rel="stylesheet" type="text/css" href="resources/css/comm/main.css">
     <link rel="stylesheet" type="text/css" href="resources/css/account/login.css">
+    <script>
+        if(<%= uid.length() %> != 0)
+            window.location.href = "/planner/views/plan/list.jsp";
+        
+    </script>
     <script src="resources/js/comm/dialog.js"></script>
     <script src="resources/js/account/login.js"></script>
 </head>

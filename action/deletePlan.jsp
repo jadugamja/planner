@@ -10,19 +10,12 @@
     String username = "stageus";
     String password = "1234";
 
-    // 값 받기
-    String edited = request.getParameter("edited");
-    String editedTime = request.getParameter("edited-time");
-    String pid = request.getParameter("pid");
-
-    System.out.println("값 받아오나 테스트트");
-    System.out.println(" edited      :::: " + edited);
-    System.out.println(" editedTime  :::: " + editedTime);
-    System.out.println(" pid ???????? :::: " + pid);
-
     Connection conn = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
+
+    // 값 받기
+    String pid = request.getParameter("pid");
 
     try {
 
@@ -35,14 +28,11 @@
         // 쿼리 만들기 
         String sql = "UPDATE plan p " +
                      "SET " +
-                     "  p.title = ?, " +
-                     "  p.start_time = ? " +
+                     "  p.del_yn = 1 " +
                      "WHERE p.id = ?;";
 
         pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, edited);
-        pstmt.setString(2, editedTime);
-        pstmt.setString(3, pid);
+        pstmt.setString(1, pid);
 
         // SQL 전송
         pstmt.executeUpdate();
@@ -64,6 +54,7 @@
         }
     }
 %>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -71,7 +62,6 @@
 </head>
 <body>
     <script>
-        alert("수정되었습니다")
         window.location.href = "../views/plan/list.jsp";
     </script>
 </body>
