@@ -27,6 +27,9 @@ window.addEventListener("load", function(){
 
     });
 
+    /* 
+     * 직원 목록 생성
+     */
     const empList = document.querySelector(".emp-list");
     const rsList = document.querySelector(".rsList").value;
     function setUserList() {
@@ -91,6 +94,18 @@ window.addEventListener("load", function(){
         }
     }
 
+    /* 
+     * 직원 선택 시 해당 직원의 일정 확인
+     */
+    const emps = document.querySelectorAll(".info-main-txt");
+    emps.forEach((emp) => {
+
+        emp.addEventListener("click", function(e){
+            var t = e.target;
+            debugger
+        });
+    });
+
 
     //////////////// 초기 설정 ////////////////
     setMyInfo();
@@ -102,5 +117,4 @@ window.addEventListener("load", function(){
     }
 
     //////////////////////////////////////////
-
 });

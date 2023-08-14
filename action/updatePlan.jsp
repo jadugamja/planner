@@ -15,11 +15,6 @@
     String editedTime = request.getParameter("edited-time");
     String pid = request.getParameter("pid");
 
-    System.out.println("값 받아오나 테스트트");
-    System.out.println(" edited      :::: " + edited);
-    System.out.println(" editedTime  :::: " + editedTime);
-    System.out.println(" pid ???????? :::: " + pid);
-
     Connection conn = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;

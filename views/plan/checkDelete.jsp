@@ -23,8 +23,8 @@
     <main class="modal success-window">
         <div class="modal-box modal-color">
             <div class="modal-content">
-                <div class="result-wrapper">
-                    <span class="result-txt">삭제하시겠습니까?</span>
+                <div class="check-wrapper">
+                    <span class="font-weight-800 font-size-22px">삭제하시겠습니까?</span>
                 </div>
                 <div class="btn-wrapper">
                     <button class="d-btn ok-btn">확인</button>

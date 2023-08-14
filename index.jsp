@@ -13,7 +13,6 @@
     <script>
         if(<%= uid.length() %> != 0)
             window.location.href = "/planner/views/plan/list.jsp";
-        
     </script>
     <script src="resources/js/comm/dialog.js"></script>
     <script src="resources/js/account/login.js"></script>

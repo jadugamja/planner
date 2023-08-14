@@ -353,6 +353,10 @@ input.plan {
     color: var(--dark-blue-color);
 }
 
+.info-main-txt {
+    cursor: pointer;
+}
+
 .rounded + .info-main-txt {
     margin-left: 15px;
 }
@@ -475,7 +479,7 @@ input.plan {
 }
 
 .plan-save-btn {
-    background-color: #46556F;
+    background-color: #46556F!important;
     color: #fff;
 }
 

@@ -106,6 +106,14 @@
     overflow-wrap: anywhere;
 }
 
+.check-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
 .input-wrapper + .result-wrapper {
     margin-top: 5px
 }

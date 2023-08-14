@@ -57,27 +57,37 @@ window.addEventListener("load", function(){
             var existingTime = parent.previousElementSibling.querySelector(".time").innerHTML;
             var hh;
 
-            // ???
-            var timeArr = existingTime.split(" ");
-            var hhmm = timeArr[1].split(":");
-
-            if(timeArr[0] == "오후") {
-                hh = parseInt(timeArr[1]) + 12;
-                hhmm[0] = hh;
-                existingTime = hhmm[0] + ":" + hhmm[1];
-            } else if(timeArr[0] == "오전") {
-                existingTime = "0" + hhmm[0] + ":" + hhmm[1];
+            if(existingTime != "") {
+                var timeArr = existingTime.split(" ");
+                var hhmm = timeArr[1].split(":");
+    
+                if(timeArr[0] == "오후") {
+                    hh = parseInt(timeArr[1]) + 12;
+                    hhmm[0] = hh;
+                    existingTime = hhmm[0] + ":" + hhmm[1];
+                } else if(timeArr[0] == "오전") {
+                    existingTime = "0" + hhmm[0] + ":" + hhmm[1];
+                }
             }
 
+            // 2번째 클릭
             if(parent.previousElementSibling.querySelector(".plan").classList.contains("edited-plan")) {
-
-                updateDataOnServer();
+                
+                // 유효성 검사
+                if(checkValidation(t)) {
+                    
+                    updatePlanContent();
+                }
+            
+            // 1번째 클릭
             } else {
         
                 editTime.type = "time";
                 editInput.type = "text";
                 editTime.name = "edited-time";
                 editInput.name = "edited";
+                editInput.maxLength = "140";
+
                 editTime.value = existingTime;
                 editInput.value = existingValue;
                 editTime.classList.add("time", "edited-time");
@@ -97,41 +107,30 @@ window.addEventListener("load", function(){
     });
 
     /* 
-     * (서버로 데이터 보내기)
+     * 일정 수정
      */
-    function updateDataOnServer() {
+    function updatePlanContent() {
         
-        // 새 폼 생성    
+        debugger
+        // 새 폼 생성
         var newForm = document.createElement("form");
 
         // 수정된 값
-        const edited = document.querySelector(".edited-plan").value != "" ? document.querySelector(".edited-plan").value : "임시";
-        const editedTime = document.querySelector(".edited-time").value != "" ? document.querySelector(".edited-time").value : "00:00";
-        const pid = document.querySelector(".edited-plan").parentElement.nextElementSibling.nextElementSibling.value;
+        const editedTime = document.querySelector(".edited-time");
+        const edited = document.querySelector(".edited-plan");
+        const pid = edited.parentElement.nextElementSibling.nextElementSibling;
+        pid.name = "pid";
 
-        // 
-        const inputPlan = document.createElement("input");
-        inputPlan.type = "hidden";
-        inputPlan.name = "edited";
-        inputPlan.value = edited;
-        newForm.appendChild(editTime);
-
-        // 
-        const inputTime = document.createElement("input");
-        inputTime.type = "hidden";
-        inputTime.name = "editedTime";
-        inputTime.value = editedTime;
-        newForm.appendChild(inputTime);
-
-        formData.append("edited", edited);
-        formData.append("edited-time", editedTime);
-        formData.append("pid", pid);
+        // ★ 수정 필요!!! ★ 이 때, 다른 form으로 태그가 이동되면서 페이지 내에서 위치도 바뀜
+        // input 3개 form에 넣어주기
+        newForm.appendChild(editedTime);
+        newForm.appendChild(edited);
+        newForm.appendChild(pid);
 
         newForm.action = "../../action/updatePlan.jsp";
         newForm.method = "POST";
-        newForm.body = formData;
 
-        document.append(newForm);
+        document.body.appendChild(newForm);
         newForm.submit();
     }
 
@@ -229,50 +228,47 @@ window.addEventListener("load", function(){
 
     });
 
-
-    // const planList = document.querySelectorAll('.plan-list'); 
-    // [].forEach.call(planList,function(plan){ 
-    //     plan.addEventListener("click", planClick, false); 
-    // }); 
-
-    // function planClick(e){ 
-    //     e.target.classList.add("active")
-    // }
-
     /* 
      * 페이지 새로고침(yearMonth)
      */
     const form = document.querySelector("form");
     function sendDataToServer() {
 
-        // const formData = new FormData();
         var yearMonth;
 
         if(parseInt(selected.textContent) < 10)
             yearMonth = parseInt(year.innerHTML).toString() + "-0" + parseInt(selected.textContent).toString();
         else
             yearMonth = parseInt(year.innerHTML).toString() + "-" + parseInt(selected.textContent).toString();
-        
-        // 필요한 데이터를 formData에 추가
-        // formData.append("year-month", yearMonth);
 
+        // 페이지 이동 및 데이터는 url 뒤에 덧붙여서 보냄
         location.href = "/planner/views/plan/list.jsp?yearMonth=" + yearMonth;
-        // form 날리는 게 아닌가..?
-        // form.action = "/planner/views/plan/list.jsp?yearMonth=" + yearMonth;
-        // form.submit();
-
     }
 
     /* 
-    * 현재 연도 세팅
-    */
-    const year = document.querySelector(".year");
-    function setThisYear() {
-           
-        var dt = new Date();
-        var thisYear = dt.getFullYear();
+     * 일정 입력란 유효성 검사
+     */
+    function checkValidation(t) {
 
-        year.innerHTML = thisYear + "년"
+        // 시간 유효성 검사
+        var updateTime = t.closest(".plan-box").querySelector(".edited-time");
+        var updateContent = t.closest(".plan-box").querySelector(".edited-plan");
+
+        if(!updateTime.value.trim())
+            return false;
+        
+        if(!updateContent.value.trim()) {
+            alert("일정 내용을 입력하세요")
+            return false;
+        } else if(updateContent.value.length > 140) {
+            alert("최대 길이를 초과했습니다")
+            return false;
+        } else if(!checkCharacter(updateContent.value)) {
+            alert("특수문자를 입력할 수 없습니다")
+            return false;
+        }
+
+        return true;
     }
 
     /* 
@@ -340,8 +336,14 @@ window.addEventListener("load", function(){
         }
     }
 
-    // 현재 연도 세팅
-    // setThisYear()
+    /* 
+     * 입력 문자 특수문자 제한
+     */
+    function checkCharacter(str) {
+        const reg_exp = /[\{\}\[\]\/?.;:|\)*~`!^\-_+<>@\#$%&\'\"\\\(\=]/gi;
+
+        return !reg_exp.test(str);
+    }
 
     // 월 콤보 박스 세팅
     setMonthBox();
