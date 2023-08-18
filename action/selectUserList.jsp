@@ -4,7 +4,7 @@
 <%@ page import="java.util.ArrayList" %>
 
 <%!
-    public List<List<String>> selectUserList() throws Exception {
+    public List<List<String>> selectUserList(String uid) throws Exception {
 
         // 데이터베이스 연결 정보
         String url = "jdbc:mysql://localhost/planner";
@@ -31,9 +31,10 @@
                                 "   ELSE '팀장' " +
                                 "END 		    AS type, " +
                                 "u.name 		AS name, " +
-                                "u.id 		    AS id FROM `user` u ORDER BY u.`type` DESC, u.name ;";
+                                "u.id 		    AS id FROM `user` u WHERE u.id != ? ORDER BY u.`type` DESC, u.name ;";
             
             pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, uid);
 
             // 쿼리 전송
             rs = pstmt.executeQuery();

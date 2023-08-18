@@ -15,8 +15,8 @@ window.addEventListener("load", function(){
      */
     const menu = document.querySelector(".menu");
     const sideBar = document.querySelector(".side-bar");
-    menu.addEventListener("click", function(e){
-        var t = e.target;
+    menu.addEventListener("click", function(){
+        // var t = e.target;
         
         sideBar.classList.toggle("hide")
     }); 
@@ -24,8 +24,9 @@ window.addEventListener("load", function(){
     /* 
      * 이전 해 버튼 클릭 이벤트
      */
+    const year = document.querySelector(".year");
     const lastYearBtn = document.querySelector(".go-prev-year");
-    lastYearBtn.addEventListener("click", function(e){
+    lastYearBtn.addEventListener("click", function(){
         year.innerHTML = (parseInt(year.innerHTML) - 1).toString() + "년";
         
         sendDataToServer();
@@ -35,7 +36,7 @@ window.addEventListener("load", function(){
      * 다음 해 버튼 클릭 이벤트
      */
     const nextYearBtn = document.querySelector(".go-next-year");
-    nextYearBtn.addEventListener("click", function(e){
+    nextYearBtn.addEventListener("click", function(){
         year.innerHTML = (parseInt(year.innerHTML) + 1).toString() + "년";
 
         sendDataToServer();
@@ -75,7 +76,6 @@ window.addEventListener("load", function(){
                 
                 // 유효성 검사
                 if(checkValidation(t)) {
-                    
                     updatePlanContent();
                 }
             
@@ -145,7 +145,7 @@ window.addEventListener("load", function(){
             var popWidth = 530;
             var popHeight = 220;
         
-            // // 팝업창 가운데 정렬
+            // 팝업창 가운데 정렬
             var popupX = (window.screen.width / 2) - (popWidth / 2);
             var popupY = (window.screen.height / 2) - (popHeight / 2);
         
@@ -155,7 +155,7 @@ window.addEventListener("load", function(){
             var option = "width=" + popWidth + ","
                         + "height=" + popHeight + ","
                         + "left=" + popupX + ","
-                        + "top=" + popupY + ","
+                        + "top=" + popupY
             ;
         
             var fakeModal = document.createElement("div")
@@ -171,7 +171,7 @@ window.addEventListener("load", function(){
      * 일정 추가 클릭 이벤트
      */
     const addBtn = document.querySelector(".add-btn");
-    addBtn.addEventListener("click", function(e){
+    addBtn.addEventListener("click", function(){
         var popWidth = 700;
         var popHeight = 600;
 
@@ -183,7 +183,7 @@ window.addEventListener("load", function(){
         var specs = "width=" + popWidth + ","
                     + "height=" + popHeight + ","
                     + "left=" + popupX + ","
-                    + "top=" + popupY + ","
+                    + "top=" + popupY
         ;
 
         window.open("/planner/views/plan/insert.jsp", name, specs, true);
@@ -231,11 +231,9 @@ window.addEventListener("load", function(){
     /* 
      * 페이지 새로고침(yearMonth)
      */
-    const form = document.querySelector("form");
     function sendDataToServer() {
-
         var yearMonth;
-
+        
         if(parseInt(selected.textContent) < 10)
             yearMonth = parseInt(year.innerHTML).toString() + "-0" + parseInt(selected.textContent).toString();
         else
@@ -312,27 +310,62 @@ window.addEventListener("load", function(){
             }
 
         }
-
     }
 
     /* 
      * 지난 날짜 취소선 긋기
      */
     const dates = document.querySelectorAll(".date-num");
-    function cancelFromYesterday() {
-        var now = new Date().getDate();
+    function cancelFromPast() {
+        var now = new Date();
+        
+        // 현재 날짜(연도, 월, 일)
+        var thisYear = now.getFullYear();
+        var thisMon = now.getMonth() + 1;
+        var thisDay = now.getDate();
 
-        for(var i = 0; i < dates.length; i++) {
-            var date = dates[i].innerHTML;
+        // 현재 시간(시, 분, 초)
+        var thisHour = now.getHours();
+        var thisMin = now.getMinutes();
 
-            if (date < now) {
-                var plans = dates[i].closest(".plan-left-side").nextElementSibling.querySelectorAll(".plan-content");
+        // 연도 체크
+        if(parseInt(year.innerHTML) <= thisYear) {
 
-                for(var j=0; j < plans.length; j++) {
-                    plans[j].classList.add("cancellation")
+            // 월 체크
+            if(parseInt(document.querySelector("#month .selected-value").innerHTML) <= thisMon) {
+
+                for(var i = 0; i < dates.length; i++) {
+                    var date = dates[i].innerHTML;
+                    var plans = dates[i].closest(".plan-left-side").nextElementSibling.querySelectorAll(".plan-content");
+
+                    // 일 체크
+                    if (date < thisDay) {
+        
+                        for(var j=0; j < plans.length; j++) {
+                            plans[j].classList.add("cancellation")
+                        }
+                    }
+
+                    // 오늘
+                    if(date == thisDay) {
+                        var times = dates[i].parentElement.parentElement.nextElementSibling.querySelectorAll(".time");
+
+                        for(var j = 0; j < times.length; j++) {
+                            
+                            var timeHH = times[j].innerHTML.split(" ")[0] == "오후" && parseInt(times[j].innerHTML.split(" ")[1].split(":")[0]) != 12 ? parseInt(times[j].innerHTML.split(" ")[1].split(":")[0]) + 12 : parseInt(times[j].innerHTML.split(" ")[1].split(":")[0]);
+                            var timeMM = parseInt(times[j].innerHTML.split(" ")[1].split(":")[1]);
+                            if(timeHH < thisHour) {
+                                plans[j].classList.add("cancellation");
+
+                            } else if(timeHH == thisHour) {
+                                if(timeMM < thisMin)
+                                    plans[j].classList.add("cancellation");
+                            }
+                        }
+                    }
                 }
+        
             }
-
         }
     }
 
@@ -352,5 +385,6 @@ window.addEventListener("load", function(){
     convertYoilColor();
 
     // 취소선 긋기
-    cancelFromYesterday();
+    cancelFromPast();
+
 });

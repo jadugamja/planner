@@ -240,7 +240,11 @@ input.plan {
 }
 
 .plan-content.cancellation {
-    text-decoration: line-through;
+    border-top: 1px solid var(--main-txt-color);
+    line-height: 0px;
+    
+    /* 글자 크기 제각각이라 취소선이 가지런하지 않음 */
+    /* text-decoration: line-through; */
 }
 
 .rotate-25 {
@@ -354,7 +358,7 @@ input.plan {
 }
 
 .info-main-txt {
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 
 .rounded + .info-main-txt {

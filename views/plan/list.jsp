@@ -32,7 +32,7 @@
     String yearMonth = now.format(formatter);
     String mon = Integer.parseInt(now.format(monthFormatter)) < 10 ? now.format(monthFormatter).substring(1) + "월" : now.format(monthFormatter) + "월";
     
-    // 파라미터 있는 경우
+    // 날짜 파라미터가 있는 경우
     if(request.getParameter("yearMonth") != null) {
         yearMonth = request.getParameter("yearMonth");
         mon = Integer.parseInt(yearMonth.split("-")[1]) < 10 ? yearMonth.split("-")[1].substring(1) + "월" : yearMonth.split("-")[1] + "월";
@@ -44,9 +44,14 @@
     String uid = session.getAttribute("uid") != null ? (String)session.getAttribute("uid") : "";
     int isAdmin = session.getAttribute("isAdmin") != null && session.getAttribute("isAdmin") instanceof Integer ? (int)session.getAttribute("isAdmin") : 0;
 
+    // 직원 파라미터가 있는 경우
+    if(request.getParameter("empId") != null) {
+        uid = request.getParameter("empId");
+    }
+
     List<List<String>> rsList = new ArrayList<>();
     if(isAdmin == 1) {
-        rsList = selectUserList();
+        rsList = selectUserList(uid);
     }
     
     // 결과값 넣을 리스트 생성
@@ -138,6 +143,7 @@
     <link rel="stylesheet" type="text/css" href="/planner/resources/css/join/join.css">
     <link rel="stylesheet" type="text/css" href="/planner/resources/css/comm/dialog.css">
     <link rel="stylesheet" type="text/css" href="/planner/resources/css/plan/list.css">
+    <link rel="stylesheet" type="text/css" href="/planner/resources/css/plan/aside.css" />
     <script>
         if(<%= uid.length() %> == 0) 
             window.location.href = "/planner/index.jsp";

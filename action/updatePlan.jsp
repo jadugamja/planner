@@ -62,11 +62,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>일정 수정</title>
 </head>
 <body>
     <script>
-        alert("수정되었습니다")
         window.location.href = "../views/plan/list.jsp";
     </script>
 </body>

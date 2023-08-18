@@ -1,5 +1,4 @@
-window.addEventListener("load", function(){
-
+window.onload = function() {
     const myType = document.querySelector("#my-type");
     const myName = document.querySelector("#my-name");
     const myEmail = document.querySelector("#my-email");
@@ -70,7 +69,7 @@ window.addEventListener("load", function(){
             spanEmpName.classList.add("emp-name");
             // 이메일
             var spanEmpEmail = document.createElement("span");
-            spanEmpEmail.classList.add("emp-name");
+            spanEmpEmail.classList.add("emp-email");
    
             for(var j=0; j < listEach.length; j++) {
                 if(j == 0)
@@ -97,12 +96,11 @@ window.addEventListener("load", function(){
     /* 
      * 직원 선택 시 해당 직원의 일정 확인
      */
-    const emps = document.querySelectorAll(".info-main-txt");
+    var emps = document.querySelectorAll("ul.emp-list li");
     emps.forEach((emp) => {
-
-        emp.addEventListener("click", function(e){
-            var t = e.target;
-            debugger
+        // emp.onclick = showEmpPlanList;
+        emp.addEventListener("click", function(){
+            alert("클릭 먹어랏랏")
         });
     });
 
@@ -115,6 +113,30 @@ window.addEventListener("load", function(){
         if(empList.closest(".info-box").classList.contains("hide"))
             empList.closest(".info-box").classList.remove("hide");
     }
-
     //////////////////////////////////////////
+
+}
+
+/* 
+ * 직원 선택 시 해당 직원의 일정 확인
+ */
+document.addEventListener("click", function(e) {
+
+    var t = e.target;
+    
+    if(t.classList.contains("emp-name")){
+        // 이름 아래 이메일 값 전달
+        showEmpPlanList(t.parentElement.nextElementSibling.innerHTML);
+    } else if(t.classList.contains("emp-email")) {
+        // 이메일 값 전달
+        showEmpPlanList(t.innerHTML);
+    }
+
 });
+
+function showEmpPlanList(empId) {
+    
+    // 해당 직원의 일정 목록 조회 페이지 이동
+    location.href = "/planner/views/plan/list.jsp?empId=" + empId;
+    
+}

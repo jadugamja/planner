@@ -30,7 +30,7 @@ window.onload = function() {
     const cancelBtn = document.querySelector(".cancel-btn");
     cancelBtn.addEventListener("click", function(){
         haveClicked = true;
-        
+        debugger
         // 부모창 dim 화면 끄기
         parent.document.querySelector(".modal").remove();
 

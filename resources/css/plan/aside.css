@@ -1,0 +1,8 @@
+.emp-list {
+    height: 22.7em;
+    overflow-y: auto;
+}
+
+.emp-name, .emp-email {
+    cursor: pointer;
+}

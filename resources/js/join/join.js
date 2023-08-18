@@ -402,14 +402,14 @@ window.onload = function() {
     /* 
      * 휴대폰 번호 중복 확인 클릭 이벤트
      */
-    doubleBtn[1].addEventListener("click", function(e){
+    doubleBtn[1].addEventListener("click", function(){
     
         var telVal = tel.value
         
         var popWidth = 530;
         var popHeight = 220;
     
-        // // 팝업창 가운데 정렬
+        // 팝업창 가운데 정렬
         var popupX = (window.screen.width / 2) - (popWidth / 2);
         var popupY = (window.screen.height / 2) - (popHeight / 2);
     
@@ -419,7 +419,7 @@ window.onload = function() {
         var option = "width=" + popWidth + ","
                     + "height=" + popHeight + ","
                     + "left=" + popupX + ","
-                    + "top=" + popupY + ","
+                    + "top=" + popupY
         ;
     
         var fakeModal = document.createElement("div")
