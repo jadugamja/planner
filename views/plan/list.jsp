@@ -44,11 +44,6 @@
     String uid = session.getAttribute("uid") != null ? (String)session.getAttribute("uid") : "";
     int isAdmin = session.getAttribute("isAdmin") != null && session.getAttribute("isAdmin") instanceof Integer ? (int)session.getAttribute("isAdmin") : 0;
 
-    // 직원 파라미터가 있는 경우
-    if(request.getParameter("empId") != null) {
-        uid = request.getParameter("empId");
-    }
-
     List<List<String>> rsList = new ArrayList<>();
     if(isAdmin == 1) {
         rsList = selectUserList(uid);
@@ -58,78 +53,92 @@
     List<Map> planList = new ArrayList<Map>();
     Map<String, Object> map;
 
-    try {
-        // Connector 파일 불러와서 MariaDB 연결
-        Class.forName("com.mysql.jdbc.Driver");
+    // 직원 파라미터가 있는 경우
+    if(request.getParameter("empId") != null) {
 
-        // DB 연결
-        conn = DriverManager.getConnection(url, username, password);
+        // 세션에 직원 아이디(이메일) 정보 저장
+        session.setAttribute("empId", request.getParameter("empId"));
 
-        String query = "SELECT p.id id, " +
-                              //"CASE " +
-                              //"   WHEN DATE_FORMAT(p.date, '%d') LIKE '0%' THEN REPLACE(DATE_FORMAT(p.date, '%d'), '0', '') " +
-                              //"   ELSE DATE_FORMAT(p.date, '%d') " +
-                              //"END day, " +
-                              "DATE_FORMAT(p.date, '%d') day, " +
-                              "CASE " +
-                              "   WHEN DATE_FORMAT(p.date, '%a') = 'Mon' THEN '月'" +
-                              "   WHEN DATE_FORMAT(p.date, '%a') = 'Tue' THEN '火'" +
-                              "   WHEN DATE_FORMAT(p.date, '%a') = 'Wed' THEN '水'" +
-                              "   WHEN DATE_FORMAT(p.date, '%a') = 'Thu' THEN '木'" +
-                              "   WHEN DATE_FORMAT(p.date, '%a') = 'Fri' THEN '金'" +
-                              "   WHEN DATE_FORMAT(p.date, '%a') = 'Sat' THEN '土'" +
-                              "   ELSE '日'" +
-                              "END yoil, " +
-                              "CASE " +
-                              "   WHEN DATE_FORMAT(p.start_time, '%p %l:%i') LIKE 'PM%' THEN REPLACE(DATE_FORMAT(p.start_time, '%p %l:%i'), 'PM', '오후') " +
-                              "   ELSE REPLACE(DATE_FORMAT(p.start_time, '%p %l:%i'), 'AM', '오전') " +
-                              "END time, " +
-                              "p.title title " +
-                        "FROM plan p " +
-                        "JOIN `user` u ON u.id = p.user_id " +
-                        "WHERE u.del_yn != 1 AND p.del_yn != 1 AND DATE_FORMAT(p.`date`, '%Y-%m') = ? " +
-                        "AND u.id = ?  " +
-                        "ORDER BY p.`date`, p.start_time, p.id;";
-        
-        pstmt = conn.prepareStatement(query);
-        pstmt.setString(1, yearMonth);
-        pstmt.setString(2, uid);
+        // 직원 파라미터가 0이면 세션에서 삭제 ㅂㅂ
+        if(request.getParameter("empId").equals("0"))
+            session.removeAttribute("empId");
+    }
 
-        rs = pstmt.executeQuery();
-        
-        while(rs.next()) {
-            map = new HashMap<String, Object>();
-            String id = rs.getString("id"); 		    // 일정 아뒤
-            String day = rs.getString("day"); 		    // 일정 날짜
-            String yoil = rs.getString("yoil"); 		// 일정 요일
-            String time = rs.getString("time");		    // 일정 시작 시간
-            String title = rs.getString("title");		// 일정 제목
+    if(session.getAttribute("empId") == null) {
 
-            map.put("id", id);
-            map.put("day", day);
-            map.put("yoil", yoil);
-            map.put("time", time);
-            map.put("title", title);
+        try {
+            // Connector 파일 불러와서 MariaDB 연결
+            Class.forName("com.mysql.jdbc.Driver");
 
-            planList.add(map);
-        }
+            // DB 연결
+            conn = DriverManager.getConnection(url, username, password);
 
-    } catch(SQLException e) {
+            String query = "SELECT p.id id, " +
+                                //"CASE " +
+                                //"   WHEN DATE_FORMAT(p.date, '%d') LIKE '0%' THEN REPLACE(DATE_FORMAT(p.date, '%d'), '0', '') " +
+                                //"   ELSE DATE_FORMAT(p.date, '%d') " +
+                                //"END day, " +
+                                "DATE_FORMAT(p.date, '%d') day, " +
+                                "CASE " +
+                                "   WHEN DATE_FORMAT(p.date, '%a') = 'Mon' THEN '月'" +
+                                "   WHEN DATE_FORMAT(p.date, '%a') = 'Tue' THEN '火'" +
+                                "   WHEN DATE_FORMAT(p.date, '%a') = 'Wed' THEN '水'" +
+                                "   WHEN DATE_FORMAT(p.date, '%a') = 'Thu' THEN '木'" +
+                                "   WHEN DATE_FORMAT(p.date, '%a') = 'Fri' THEN '金'" +
+                                "   WHEN DATE_FORMAT(p.date, '%a') = 'Sat' THEN '土'" +
+                                "   ELSE '日'" +
+                                "END yoil, " +
+                                "CASE " +
+                                "   WHEN DATE_FORMAT(p.start_time, '%p %l:%i') LIKE 'PM%' THEN REPLACE(DATE_FORMAT(p.start_time, '%p %l:%i'), 'PM', '오후') " +
+                                "   ELSE REPLACE(DATE_FORMAT(p.start_time, '%p %l:%i'), 'AM', '오전') " +
+                                "END time, " +
+                                "p.title title " +
+                            "FROM plan p " +
+                            "JOIN `user` u ON u.id = p.user_id " +
+                            "WHERE u.del_yn != 1 AND p.del_yn != 1 AND DATE_FORMAT(p.`date`, '%Y-%m') = ? " +
+                            "AND u.id = ?  " +
+                            "ORDER BY p.`date`, p.start_time, p.id;";
+            
+            pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, yearMonth);
+            pstmt.setString(2, uid);
 
-        // 일단 로그 ㄱㄱ
-        e.printStackTrace();
-        // e.getMessage();
+            rs = pstmt.executeQuery();
+            
+            while(rs.next()) {
+                map = new HashMap<String, Object>();
+                String id = rs.getString("id"); 		    // 일정 아뒤
+                String day = rs.getString("day"); 		    // 일정 날짜
+                String yoil = rs.getString("yoil"); 		// 일정 요일
+                String time = rs.getString("time");		    // 일정 시작 시간
+                String title = rs.getString("title");		// 일정 제목
 
-    } finally {
-        // 자원 해제
-        if (rs != null) {
-            rs.close();
-        }
-        if (pstmt != null) {
-            pstmt.close();
-        }
-        if (conn != null) {
-            conn.close();
+                map.put("id", id);
+                map.put("day", day);
+                map.put("yoil", yoil);
+                map.put("time", time);
+                map.put("title", title);
+
+                planList.add(map);
+            }
+
+        } catch(SQLException e) {
+
+            // 일단 로그 ㄱㄱ
+            e.printStackTrace();
+            // e.getMessage();
+
+        } finally {
+            // 자원 해제
+            if (rs != null) {
+                rs.close();
+            }
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         }
     }
 %>
@@ -203,7 +212,14 @@
                 </div>
                 <!-- //날짜 검색 영역 -->
 
-                <!-- 일정 -->
+            <% 
+                if(session.getAttribute("empId") != null) {
+            %>
+                <iframe src="listPerMember.jsp?empId=<%=(String)session.getAttribute("empId")%>&yearMonth=<%=yearMonth%>" width="100%" height="740" frameborder="0" allowfullscreen></iframe>
+            <% 
+                } else {
+            %>
+                <!-- 현재 로그인한 사용자의 일정 -->
                 <section class="plan-list-wrapper">
                     <%
                         // 중복 없는 날짜 그룹
@@ -293,6 +309,12 @@
                     </div>
                     <!-- //일정 추가 버튼 -->
                 </section>
+                <!-- //현재 로그인한 사용자의 일정 -->
+            
+            <%
+                }
+            %>
+
             </div>
         </form>
     </main>

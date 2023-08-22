@@ -3,6 +3,6 @@
     overflow-y: auto;
 }
 
-.emp-name, .emp-email {
+#my-name, #my-email, .emp-name, .emp-email {
     cursor: pointer;
 }

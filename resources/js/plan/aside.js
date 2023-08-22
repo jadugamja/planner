@@ -13,7 +13,7 @@ window.onload = function() {
         myTel.innerHTML = myInfo[2];
         myBday.innerHTML = myInfo[3];
     }
-    
+
     /* 
      * 로그아웃 클릭 이벤트
      */
@@ -114,7 +114,6 @@ window.onload = function() {
             empList.closest(".info-box").classList.remove("hide");
     }
     //////////////////////////////////////////
-
 }
 
 /* 
@@ -132,6 +131,10 @@ document.addEventListener("click", function(e) {
         showEmpPlanList(t.innerHTML);
     }
 
+    // 내 이름/이메일 클릭 시
+    if(t.id == "my-name" || t.id == "my-email") {
+        location.href = "/planner/views/plan/list.jsp?empId=0";
+    }
 });
 
 function showEmpPlanList(empId) {

@@ -42,6 +42,14 @@ header {
     border-bottom: var(--box-border);
 }
 
+.h-emp {
+    margin-left: 23px;
+    font-size: 27px;
+    background: -webkit-linear-gradient(#161818, var(--info-icon-bg-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 .main-wrapper {
     width: 61.563em;
     flex-direction: column;
@@ -148,11 +156,9 @@ input.time {
 }
 
 .plan {
-    margin-left: 9px;
     font-size: 19px;
     font-weight: 500;
     word-break: break-word;
-
 }
 
 input.plan {
@@ -237,6 +243,9 @@ input.plan {
 
 .plan-content {
     margin-left: 8px;
+    display: grid;
+    grid-template-columns: 75px 1fr;
+    grid-gap: 7px;
 }
 
 .plan-content.cancellation {

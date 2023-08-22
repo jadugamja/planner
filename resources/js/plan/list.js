@@ -111,7 +111,6 @@ window.addEventListener("load", function(){
      */
     function updatePlanContent() {
         
-        debugger
         // 새 폼 생성
         var newForm = document.createElement("form");
 
@@ -171,24 +170,26 @@ window.addEventListener("load", function(){
      * 일정 추가 클릭 이벤트
      */
     const addBtn = document.querySelector(".add-btn");
-    addBtn.addEventListener("click", function(){
-        var popWidth = 700;
-        var popHeight = 600;
-
-        var popupX = (window.screen.width / 2) - (popWidth / 2);
-        var popupY = (window.screen.height / 2) - (popHeight / 2);
-
-        // 새 창 열기
-        var name = "_blank"
-        var specs = "width=" + popWidth + ","
-                    + "height=" + popHeight + ","
-                    + "left=" + popupX + ","
-                    + "top=" + popupY
-        ;
-
-        window.open("/planner/views/plan/insert.jsp", name, specs, true);
-
-    });
+    if(addBtn != null) {    // 다른 직원의 일정 목록 조회 시, 일정 추가 버튼 없음
+        addBtn.addEventListener("click", function(){
+            var popWidth = 700;
+            var popHeight = 600;
+    
+            var popupX = (window.screen.width / 2) - (popWidth / 2);
+            var popupY = (window.screen.height / 2) - (popHeight / 2);
+    
+            // 새 창 열기
+            var name = "_blank"
+            var specs = "width=" + popWidth + ","
+                        + "height=" + popHeight + ","
+                        + "left=" + popupX + ","
+                        + "top=" + popupY
+            ;
+    
+            window.open("/planner/views/plan/insert.jsp", name, specs, true);
+    
+        });
+    }
     
     /* 
      * 월 콤보 박스 클릭 이벤트
@@ -338,18 +339,20 @@ window.addEventListener("load", function(){
                     var date = dates[i].innerHTML;
                     var plans = dates[i].closest(".plan-left-side").nextElementSibling.querySelectorAll(".plan-content");
 
-                    // 일 체크
+                    // 오늘 이전 날짜 확인
                     if (date < thisDay) {
         
+                        // plan article loop
                         for(var j=0; j < plans.length; j++) {
                             plans[j].classList.add("cancellation")
                         }
                     }
 
-                    // 오늘
+                    // 오늘 확인
                     if(date == thisDay) {
                         var times = dates[i].parentElement.parentElement.nextElementSibling.querySelectorAll(".time");
 
+                        // 오늘 날짜의 time(= plan) article loop
                         for(var j = 0; j < times.length; j++) {
                             
                             var timeHH = times[j].innerHTML.split(" ")[0] == "오후" && parseInt(times[j].innerHTML.split(" ")[1].split(":")[0]) != 12 ? parseInt(times[j].innerHTML.split(" ")[1].split(":")[0]) + 12 : parseInt(times[j].innerHTML.split(" ")[1].split(":")[0]);
