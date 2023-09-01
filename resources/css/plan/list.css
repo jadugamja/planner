@@ -145,6 +145,10 @@ header {
     padding: 8px 0;
 }
 
+.plan-list.today {
+    background-color: #E4F6DA;
+}
+
 .time {
     font-size: 16px;
     font-weight: 300;
@@ -198,7 +202,7 @@ input.plan {
     justify-content: center;
     align-items: center;
 
-    flex-basis: 14%;
+    flex-basis: 14.5%;
 }
 
 .saturday {
@@ -289,7 +293,7 @@ input.plan {
 .add-btn {
     position: fixed;
     top: 87%;
-    left: 72%;
+    left: 69%;
     width: 91px;
     height: 84px;
 

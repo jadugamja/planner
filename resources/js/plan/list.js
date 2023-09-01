@@ -217,13 +217,16 @@ window.addEventListener("load", function(){
      */
     document.addEventListener("click", function(e){
         var t = e.target
-        var isSelect = t.classList.contains("select") || t.closest(".select")
-  
-        var monList = t.querySelector(".option-wrapper") != null ? t.querySelector(".option-wrapper") : document.querySelector(".option-wrapper");
 
-        if(isSelect)
+        var isSelect = t.classList.contains("select") || t.closest(".select")
+        var monList = t.querySelector(".option-wrapper") != null ? t.querySelector(".option-wrapper") : document.querySelector(".option-wrapper");
+        var isSideBar = t.classList.contains("side-bar");
+        // var sideBar = document.querySelector(".side-bar");
+
+        if(isSelect || isSideBar)
             return;
         
+        // sideBar.classList.add("hide");
         monList.classList.add("hide");
         monthBox.classList.remove("active");
 
@@ -373,6 +376,29 @@ window.addEventListener("load", function(){
     }
 
     /* 
+     * 오늘 날짜에 해당하는 일정 색칠하기
+     */
+    function paintTodayPlan() {
+        var now = new Date();
+        
+        // 현재 날짜(연도, 월, 일)
+        var thisYear = now.getFullYear();
+        var thisMon = now.getMonth() + 1;
+        var thisDay = now.getDate();
+
+        
+        if(parseInt(year.innerHTML) == thisYear 
+            && parseInt(document.querySelector("#month .selected-value").innerHTML) == thisMon) {
+            for(var i = 0; i < dates.length; i++) {
+            var date = dates[i].innerHTML;
+            
+            if(date == thisDay)
+                dates[i].closest(".plan-list").classList.add("today");
+            }
+        }
+    }
+
+    /* 
      * 입력 문자 특수문자 제한
      */
     function checkCharacter(str) {
@@ -389,5 +415,8 @@ window.addEventListener("load", function(){
 
     // 취소선 긋기
     cancelFromPast();
+
+    // 오늘 날짜에 해당하는 일정 색칠하기
+    paintTodayPlan()
 
 });

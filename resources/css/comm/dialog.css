@@ -161,6 +161,7 @@
 /* 일정 추가 페이지 */
 #category .option-wrapper {
     width: 70.9%;
+    height: max-content;
     margin: 0 0 0px -13.2px;
     border-top: 0;
 }
